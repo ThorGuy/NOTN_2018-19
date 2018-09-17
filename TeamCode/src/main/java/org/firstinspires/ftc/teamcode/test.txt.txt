@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 Thor here
+=======
+why hello there (general kenobi)
+>>>>>>> a507299ba2a8ba13336cbad7076f690807a0d659
 =======
 dlroW olleH
 >>>>>>> 8154984be8a2b4caa73aafbcd3835f2da50da13b
