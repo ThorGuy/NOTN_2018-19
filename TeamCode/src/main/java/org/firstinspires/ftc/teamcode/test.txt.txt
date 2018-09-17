@@ -2,6 +2,9 @@
 <<<<<<< HEAD
 Thor here
 =======
+Hello World!
+dlroW olleH
+hi my name is shivani 
 why hello there (general kenobi)
 >>>>>>> a507299ba2a8ba13336cbad7076f690807a0d659
 =======
