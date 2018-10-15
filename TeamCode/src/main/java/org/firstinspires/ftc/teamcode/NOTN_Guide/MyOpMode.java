@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode; //Lets the library know that this code exists
+package org.firstinspires.ftc.teamcode.NOTN_Guide; //Lets the library know that this code exists
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;   //Allows us to use the library
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
