@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class MyOpMode extends OpMode{ //Tells the library this is an opmode
 
 	//Creating the motor variables
-	private DcMotor leftFront, rightFront, leftBack, rightBack;
+	private DcMotor leftFront, rightFront, leftBack, rightBack, arm_height, arm_rotation;
 
     public void init(){
         //Initialization Code
@@ -20,6 +20,9 @@ public class MyOpMode extends OpMode{ //Tells the library this is an opmode
 		rightFront = hardwareMap.dcMotor.get("rightFront");
 		leftBack = hardwareMap.dcMotor.get("leftBack");
 		rightBack = hardwareMap.dcMotor.get("rightBack");
+        
+		arm_height = hardwareMap.dcMotor.get("arm_height");
+        arm_rotation = hardwareMap.dcMotor.get("arm_rotation");
     }
 
     public void loop(){
