@@ -46,7 +46,7 @@ public class MyOpMode extends OpMode{ //Tells the library this is an opmode
         //Simple mechanum drive
         //the power needs to be negated on the left side since the motors are facing the other direction
         //xv needs to be different for the front and back motors in order to move laterally
-        if(rv!=0){
+        if(rv != 0){
             //rotate the robot
             rightFront.setPower(rv);
             rightBack.setPower(rv);
