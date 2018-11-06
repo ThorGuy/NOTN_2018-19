@@ -33,6 +33,8 @@ public class MyOpMode extends OpMode{ //Tells the library this is an opmode
         //Create a buffer, so not every slight movement of the joystick will make the robot move
         float xv = gamepad1.left_stick_x;
         float yv = gamepad1.left_stick_y;
+        float rotV = gamepad2.left_stick_y;
+        float riseV = gamepad2.right_stick_y;
         if(Math.abs(xv) < 0.3) xv = 0;
         if(Math.abs(yv) < 0.3) yv = 0;
         float rv = 0;
@@ -46,6 +48,7 @@ public class MyOpMode extends OpMode{ //Tells the library this is an opmode
         //Simple mechanum drive
         //the power needs to be negated on the left side since the motors are facing the other direction
         //xv needs to be different for the front and back motors in order to move laterally
+        //TODO: Drive Train
         if(rv != 0){
             //rotate the robot
             rightFront.setPower(rv);
@@ -59,5 +62,11 @@ public class MyOpMode extends OpMode{ //Tells the library this is an opmode
             leftFront.setPower(-yv - xv);
             leftBack.setPower(-yv + xv);
         }
+
+
+        //TODO: Arm
+        arm_height.setPower(riseV);
+        arm_rotation.setPower(rotV);
+
     }
 }
