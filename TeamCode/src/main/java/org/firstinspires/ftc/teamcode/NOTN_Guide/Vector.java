@@ -27,6 +27,17 @@ public class Vector {
   }
 
   /**
+   * Sets up the initial values of the Vector
+   *
+   * @param x The initial x coordinate
+   * @param y The initial y coordinate
+   */
+  public Vector(double x, double y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  /**
    * Sets up the vector with the initial values at 0, 0, 0
    */
   public Vector() {
@@ -70,5 +81,16 @@ public class Vector {
     x += shiftX;
     y += shiftY;
     z += shiftZ;
+  }
+
+  /**
+   * Shift the vector along the respective axis
+   *
+   * @param shiftX How far along the x-axis to move
+   * @param shiftY How far along the y-axis to move
+   */
+  public void translate(double shiftX, double shiftY) {
+    x += shiftX;
+    y += shiftY;
   }
 }
