@@ -17,10 +17,10 @@ public class MyOpMode extends OpMode{ //Tells the library this is an opmode
         //Assigning the motor variables to the actual motors
 
         leftFront = hardwareMap.dcMotor.get("leftFront");
-		rightFront = hardwareMap.dcMotor.get("rightFront");
+        rightFront = hardwareMap.dcMotor.get("rightFront");
 		leftBack = hardwareMap.dcMotor.get("leftBack");
 		rightBack = hardwareMap.dcMotor.get("rightBack");
-        
+
 		arm_height = hardwareMap.dcMotor.get("arm_height");
         arm_rotation = hardwareMap.dcMotor.get("arm_rotation");
     }
