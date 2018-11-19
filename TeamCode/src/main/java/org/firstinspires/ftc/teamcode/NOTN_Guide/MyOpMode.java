@@ -21,8 +21,8 @@ public class MyOpMode extends OpMode{ //Tells the library this is an opmode
 		leftBack = hardwareMap.dcMotor.get("leftBack");
 		rightBack = hardwareMap.dcMotor.get("rightBack");
 
-		arm_height = hardwareMap.dcMotor.get("arm_height");
-        arm_rotation = hardwareMap.dcMotor.get("arm_rotation");
+		//arm_height = hardwareMap.dcMotor.get("arm_height");
+        //arm_rotation = hardwareMap.dcMotor.get("arm_rotation");
     }
 
     public void loop(){
@@ -37,7 +37,7 @@ public class MyOpMode extends OpMode{ //Tells the library this is an opmode
         float riseV = gamepad2.right_stick_y;
         if(Math.abs(xv) < 0.3) xv = 0;
         if(Math.abs(yv) < 0.3) yv = 0;
-        float rv = 0;
+        int rv = 0;
 
         if(gamepad1.right_trigger>0.5) rv++;
         if(gamepad1.left_trigger>0.5) rv--;
@@ -57,16 +57,22 @@ public class MyOpMode extends OpMode{ //Tells the library this is an opmode
             leftBack.setPower(rv);
         }else{
             //move laterally
-            rightFront.setPower(yv - xv);
-            rightBack.setPower(yv + xv);
-            leftFront.setPower(-yv - xv);
-            leftBack.setPower(-yv + xv);
+            rightFront.setPower(-yv + xv);
+            rightBack.setPower(-yv - xv);
+            leftFront.setPower(yv + xv);
+            leftBack.setPower(yv - xv);
+
+            //
+            telemetry.addData("rightFront", yv - xv);
+            telemetry.addData("rightBack", yv + xv);
+            telemetry.addData("leftFront", -yv - xv);
+            telemetry.addData("leftBack", -yv + xv);
         }
 
 
         //TODO: Arm
-        arm_height.setPower(riseV);
-        arm_rotation.setPower(rotV);
+        //arm_height.setPower(riseV);
+        //arm_rotation.setPower(rotV);
 
     }
 }
