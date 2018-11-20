@@ -1,8 +1,7 @@
-package notn_guide.teamcode.ftc.firstinspires.org.ftcrobotics;
-
 // go to fixed position (in encoder ticks) of linear slide
 // Position is determined by global variable linear_position
 // while it is running, it sets variable linear_moving to be true
+/*
 package org.firstinspires.ftc.teamcode.NOTN_Guide;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -12,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import android.os.Bundle;
 @TeleOp(name = "linear motor", group = "linear motor")
 public class MainActivity extends LinearOpMode{
     private ElapsedTime runtime = new ElapsedTime();
@@ -56,7 +56,6 @@ public class MainActivity extends LinearOpMode{
 
 // Choose to drive using either Tank Mode, or POV Mode
 
-import android.os.Bundle;
 
 
             protected void positionLinear(Bundle savedInstanceState) {
@@ -76,3 +75,4 @@ import android.os.Bundle;
                 ;
                 nMotorEncoder[linearl] = 0;
                 linear_moving = false;
+                */

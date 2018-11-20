@@ -69,9 +69,9 @@ public class MyOpMode extends OpMode{ //Tells the library this is an opmode
         } else {
             //move laterally
             rightFront.setPower(-yv + xv);
-            rightBack.setPower(-yv - xv);
+            rightBack.setPower(yv - xv);
             leftFront.setPower(yv + xv);
-            leftBack.setPower(yv - xv);
+            leftBack.setPower(-yv - xv);
         }
     }
 
