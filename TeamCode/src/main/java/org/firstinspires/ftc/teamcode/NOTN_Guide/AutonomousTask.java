@@ -37,7 +37,7 @@ public class AutonomousTask extends LinearOpMode {
     this.mmFTCFieldWidth = mmFTCFieldWidth;
   }
 
-  @Override
+  @Override // Changing the original method in LinearOpMode
   public void runOpMode() {
 
     int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -45,12 +45,14 @@ public class AutonomousTask extends LinearOpMode {
     parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
     vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
+    // See RoverRuckus.xml and RoverRuckus.dat
     VuforiaTrackables roverRuckus    = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
     VuforiaTrackable  bluePerimeter  = roverRuckus.get(0);
     VuforiaTrackable  redPerimeter   = roverRuckus.get(1);
     VuforiaTrackable  frontPerimeter = roverRuckus.get(2);
     VuforiaTrackable  backPerimeter  = roverRuckus.get(3);
 
+    // Not sure what the hell the names are for
     bluePerimeter.setName("BluePerimeter");
     redPerimeter.setName("RedPerimeter");
     frontPerimeter.setName("FrontPerimeter");
@@ -58,6 +60,11 @@ public class AutonomousTask extends LinearOpMode {
 
     List<VuforiaTrackable> allTrackables = new ArrayList<>();
     allTrackables.addAll(roverRuckus);
+
+    /*
+     * Locations are where the targets are located.
+     * Names correspond with the different targets.
+     */
 
     OpenGLMatrix blueLocation = OpenGLMatrix
             .translation(-mmFTCFieldWidth/2, 0, 0)
@@ -98,14 +105,18 @@ public class AutonomousTask extends LinearOpMode {
                     AngleUnit.DEGREES, -90, 0, 0));
     RobotLog.ii(TAG, "Phone = %s", format(phoneLocationOnRobot));
 
-    ((VuforiaTrackableDefaultListener) redTarget.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
-    ((VuforiaTrackableDefaultListener) blueTarget.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
+    ((VuforiaTrackableDefaultListener) bluePerimeter.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
+    ((VuforiaTrackableDefaultListener) redPerimeter.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
+    ((VuforiaTrackableDefaultListener) frontPerimeter.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
+    ((VuforiaTrackableDefaultListener) backPerimeter.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
 
     telemetry.addData(">", "Press Play to start tracking");
     telemetry.update();
     waitForStart();
 
     roverRuckus.activate();
+
+    // Loop de Loop - Run until the program is shut down
     while (opModeIsActive()) {
         for (VuforiaTrackable trackable : allTrackables) {
             telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible() ? "Visible" : "Not Visible");
@@ -123,7 +134,7 @@ public class AutonomousTask extends LinearOpMode {
     }
   }
 
-  String format(OpenGLMatrix transformationMatrix) {
+  String format(OpenGLMatrix transformationMatrix) { // Idk wha the hell this does
       return transformationMatrix.formatAsTransform();
   }
 }
