@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode") //Tells the app this is an opmode
-public class MyOpMode extends OpMode{ //Tells the library this is an opmode
+public class DriverControlled extends OpMode{ //Tells the library this is an opmode
 
 	//Creating the motor variables
 	private DcMotor leftFront, rightFront, leftBack, rightBack, arm_height, arm_rotation;
@@ -95,6 +95,6 @@ public class MyOpMode extends OpMode{ //Tells the library this is an opmode
         return leftFront!=null && rightFront!=null && leftBack!=null && rightBack!=null;
     }
     public boolean armLoaded(){
-        return arm_height!=null && arm_rotation!=null;
+        return arm_height!=null && arm_rotation!=null && sweeper!=null;
     }
 }
