@@ -50,6 +50,7 @@ public class AutonomousTask extends LinearOpMode {
     VuforiaTrackable  redPerimeter   = roverRuckus.get(1);
     VuforiaTrackable  frontPerimeter = roverRuckus.get(2);
     VuforiaTrackable  backPerimeter  = roverRuckus.get(3);
+
     bluePerimeter.setName("BluePerimeter");
     redPerimeter.setName("RedPerimeter");
     frontPerimeter.setName("FrontPerimeter");
@@ -83,7 +84,7 @@ public class AutonomousTask extends LinearOpMode {
     RobotLog.ii(TAG, "Front Target = %s", format(frontLocation));
 
     OpenGLMatrix backLocation = OpenGLMatrix
-            .translation(-mmFTCFieldWidth/2, 0, 0)
+            .translation(0, -mmFTCFieldWidth/2, 0)
             .multiplied(Orientation.getRotationMatrix(
                     AxesReference.EXTRINSIC, AxesOrder.XZX,
                     AngleUnit.DEGREES, 90, 90, 0));
@@ -91,7 +92,7 @@ public class AutonomousTask extends LinearOpMode {
     RobotLog.ii(TAG, "Blue Target = %s", format(backLocation));
 
     OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
-            .translation(mmBotWidth/2,0,0)
+            .translation(mmBotWidth/2, 0, 0)
             .multiplied(Orientation.getRotationMatrix(
                     AxesReference.EXTRINSIC, AxesOrder.YZY,
                     AngleUnit.DEGREES, -90, 0, 0));
