@@ -39,7 +39,7 @@ public class AutonomousTask extends LinearOpMode {
 
   @Override
   public void runOpMode() {
-    
+
     int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
     VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
     parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
@@ -58,13 +58,39 @@ public class AutonomousTask extends LinearOpMode {
     List<VuforiaTrackable> allTrackables = new ArrayList<>();
     allTrackables.addAll(roverRuckus);
 
+    OpenGLMatrix blueLocation = OpenGLMatrix
+            .translation(-mmFTCFieldWidth/2, 0, 0)
+            .multiplied(Orientation.getRotationMatrix(
+                    AxesReference.EXTRINSIC, AxesOrder.XZX,
+                    AngleUnit.DEGREES, 90, 90, 0));
+    bluePerimeter.setLocation(blueLocation);
+    RobotLog.ii(TAG, "Blue Target = %s", format(blueLocation));
+
     OpenGLMatrix redLocation = OpenGLMatrix
-            .translation(-mmFTCFieldWidth/2, 0, 0) // TODO Fix Translation
+            .translation(mmFTCFieldWidth/2, 0, 0)
             .multiplied(Orientation.getRotationMatrix(
                     AxesReference.EXTRINSIC, AxesOrder.XZX,
                     AngleUnit.DEGREES, 90, 90, 0));
     redPerimeter.setLocation(redLocation);
     RobotLog.ii(TAG, "Red Target = %s", format(redTargetLocationOnField));
+
+    OpenGLMatrix frontLocation = OpenGLMatrix
+            .translation(0, mmFTCFieldWidth/2, 0)
+            .multiplied(Orientation.getRotationMatrix(
+                    AxesReference.EXTRINSIC, AxesOrder.XZX,
+                    AngleUnit.DEGREES, 90, 90, 0));
+    frontPerimeter.setLocation(frontLocation);
+    RobotLog.ii(TAG, "Front Target = %s", format(frontLocation));
+
+    OpenGLMatrix backLocation = OpenGLMatrix
+            .translation(-mmFTCFieldWidth/2, 0, 0)
+            .multiplied(Orientation.getRotationMatrix(
+                    AxesReference.EXTRINSIC, AxesOrder.XZX,
+                    AngleUnit.DEGREES, 90, 90, 0));
+    backPerimeter.setLocation(backLocation);
+    RobotLog.ii(TAG, "Blue Target = %s", format(backLocation));
+
+    
   }
 
   String format(OpenGLMatrix transformationMatrix) {
