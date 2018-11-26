@@ -13,17 +13,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import android.os.Bundle;
 @TeleOp(name = "linear motor", group = "linear motor")
-public class MainActivity extends LinearOpMode{
+public class MainActivity extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive, rightDrive, leftBack, rightBack = null;
     private DcMotor beltDrive = null;
 
 
-
     //
     @Override
     public void runOpMode() {
-
 
 
         telemetry.addData("Status", "Initialized");
@@ -54,25 +52,27 @@ public class MainActivity extends LinearOpMode{
             double leftPower;
             double rightPower;
 
-// Choose to drive using either Tank Mode, or POV Mode
+            // Choose to drive using either Tank Mode, or POV Mode
+        }
+    }
 
 
+    protected void positionLinear (Bundle savedInstanceState){
+        //indicate we are moving:
+        boolean linear_moving = true; // compute distance to move
+        int distanceToMove = nMotorEncoder[linear1]; // set target
+        nMotorEncoder[linearl] = distanceToMove;
+        wait1Msec(10); //wait for communication with the controller to complete
+        if (distanceToMove > 0) {
+            nMotorEncoder[linearl] = 70;// moving up
+        } else {
+            nMotorEncoder[linearl] = -70; // moving down
+        }
 
-            protected void positionLinear(Bundle savedInstanceState) {
-                //indicate we are moving:
-                boolean linear_moving = true; // compute distance to move
-                int distanceToMove = nMotorEncoder[linear1]; // set target
-                nMotorEncoder[linearl] = distanceToMove;
-                wait1Msec(10); //wait for communication with the controller to complete
-                if (distanceToMove > 0) {
-                    nMotorEncoder[linearl] = 70;// moving up
-                } else {
-                    nMotorEncoder[linearl] = -70; // moving down
-                }
-                ;
-                while (nMotorRunState[linearl] != runStateIdle) {
-                }
-                ;
+        while (nMotorRunState[linearl] != runStateIdle) {
                 nMotorEncoder[linearl] = 0;
                 linear_moving = false;
-                */
+        }
+    }
+}
+*/
