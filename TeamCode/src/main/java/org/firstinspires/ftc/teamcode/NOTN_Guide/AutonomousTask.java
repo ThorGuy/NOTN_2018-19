@@ -90,7 +90,36 @@ public class AutonomousTask extends LinearOpMode {
     backPerimeter.setLocation(backLocation);
     RobotLog.ii(TAG, "Blue Target = %s", format(backLocation));
 
-    
+    OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
+            .translation(mmBotWidth/2,0,0)
+            .multiplied(Orientation.getRotationMatrix(
+                    AxesReference.EXTRINSIC, AxesOrder.YZY,
+                    AngleUnit.DEGREES, -90, 0, 0));
+    RobotLog.ii(TAG, "Phone = %s", format(phoneLocationOnRobot));
+
+    ((VuforiaTrackableDefaultListener) redTarget.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
+    ((VuforiaTrackableDefaultListener) blueTarget.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
+
+    telemetry.addData(">", "Press Play to start tracking");
+    telemetry.update();
+    waitForStart();
+
+    roverRuckus.activate();
+    while (opModeIsActive()) {
+        for (VuforiaTrackable trackable : allTrackables) {
+            telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible() ? "Visible" : "Not Visible");
+            OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+            if (robotLocationTransform != null) {
+                lastLocation = robotLocationTransform;
+            }
+        }
+        if (lastLocation != null) {
+            telemetry.addData("Pos", format(lastLocation));
+        } else {
+            telemetry.addData("Pos", "Unknown");
+        }
+        telemetry.update();
+    }
   }
 
   String format(OpenGLMatrix transformationMatrix) {
