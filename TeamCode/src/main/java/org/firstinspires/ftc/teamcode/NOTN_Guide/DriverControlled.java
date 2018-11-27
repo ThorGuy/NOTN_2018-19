@@ -48,6 +48,12 @@ public class DriverControlled extends OpMode{ //Tells the library this is an opm
         if (Math.abs(xv) < 0.3) xv = 0;
         if (Math.abs(yv) < 0.3) yv = 0;
 
+				//Slow down movement by half is a is pressed
+				if(gamepa1.a){
+					xv *= 0.5;
+					yv *= 0.5;
+				}
+
         //Rotation of the robot
         int rv = 0;
         if (gamepad1.right_trigger > 0.5) rv++;
