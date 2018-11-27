@@ -1,3 +1,4 @@
+/*
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,11 +19,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Uses Vuforia to accomplish the Autonomous Task
- *
- * @author Nerds of the North
- */
+ //Uses Vuforia to accomplish the Autonomous Task
+ //
+ //@author Nerds of the North
+ 
 public class AutonomousTask extends LinearOpMode {
 
   private static final String LICENSE_KEY = "ASi9SYr/////AAABma/cyoOFHEPdrzkaih5zX/Z/ynaGPQlAyfODszkNWyNcQzAptBle2+ojpu2121BH/a7WdgOwfFDZLHOSpQKCL0j2ZVq2o2qrsL3Dmqc/WPBkAXcatv5rWSnlRVRUcFbdVH92oWrmbMEPs70sCC/n1w8k8KnS0yNfW/OhsbJNnsIhX5m/zmvrR1ufBvfMzPi1ncVuM07xlglIChjWvXhMf+5/7hiyNePujoCw+aQgHrMI2vWCFLAsK1AK7+9q0w/zUdS6irTc38WsniwHOlvr13N2DmHU6NI2P4Kx5Z0z2AsLVoqZ+P+4EgTccPsabXruLkbsKnx34am/8FUlI/TfG98PsxGQoLh4deAv8vICruOD";
@@ -141,3 +141,4 @@ public class AutonomousTask extends LinearOpMode {
       return transformationMatrix.formatAsTransform();
   }
 }
+*/
