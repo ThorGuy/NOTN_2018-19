@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 /**
  * Just made a cleaned up version, not sure if this works.
  *
- * @author Connor Vann
+ * @author Connor Vann, stole half of this from Kathryn
  */
 @TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
 public class CVSCrappyTeleOpThing extends OpMode {
@@ -35,7 +35,6 @@ public class CVSCrappyTeleOpThing extends OpMode {
     else velocityY = 0.0f;
 
     rotationalVelocity = 0.0f;
-
     if(gamepad1.right_trigger > 0.5f && gamepad1.left_trigger > 0.5f) {
       rotationalVelocity = 0.0f;
     } else if (gamepad1.right_trigger > 0.5f) {
@@ -50,10 +49,10 @@ public class CVSCrappyTeleOpThing extends OpMode {
       leftFront.setPower(rotationalVelocity);
       leftBack.setPower(rotationalVelocity);
     } else {
-      rightFront.setPower(-velocityY - velocityX);
-      rightBack.setPower(-velocityY + velocityX);
-      leftFront.setPower(velocityY - velocityX);
-      leftBack.setPower(velocityY + velocityX);
+      rightFront.setPower(velocityY + velocityX);
+      rightBack.setPower(velocityY - velocityX);
+      leftFront.setPower(velocityY + velocityX);
+      leftBack.setPower(velocityY - velocityX);
     }
   }
 
