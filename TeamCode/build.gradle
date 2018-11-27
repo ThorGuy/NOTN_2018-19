@@ -13,3 +13,10 @@
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'
+repositories{
+    google()
+    jcenter()
+    maven {
+        url "https://jitpack.io"
+    }
+}
