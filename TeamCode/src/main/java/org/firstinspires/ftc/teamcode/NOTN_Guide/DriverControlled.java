@@ -108,6 +108,7 @@ public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
             rightBack.setPower(yv + xv);
             leftFront.setPower(-yv - xv);
             leftBack.setPower(-yv + xv);
+						telemetry.addData("Testing encoders: ", rightFront.getCurrentPosition());
         }
     }
 }
