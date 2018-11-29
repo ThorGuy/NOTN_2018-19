@@ -18,7 +18,7 @@ public class Autonomous extends LinearOpMode{
     public void runOpMode() throws InterruptedException{
         initialize();
         waitForStart();
-        moveMotor(ArmLift, -100, 0.1);
+        moveMotor(ArmLift, -10, 0.1);
 //moveDirection("backwards", 100);
     }
 
