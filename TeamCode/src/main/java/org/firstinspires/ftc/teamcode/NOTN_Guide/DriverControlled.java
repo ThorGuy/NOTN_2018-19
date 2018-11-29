@@ -2,17 +2,18 @@ package org.firstinspires.ftc.teamcode.NOTN_Guide; //Lets the library know that 
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="Tua Mater", group="Iterative Opmode") //Tells the app this is an opmode
+@TeleOp(name="Dab on it", group="Iterative Opmode") //Tells the app this is an opmode
 public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
 
 	//Creating the motor variables
 	private DcMotor leftFront, rightFront, leftBack, rightBack, ArmRotate, ArmLift;
-	private Servo sweeper, rotate, item;
-    double sweeperR;
+	private Servo item, dropper;
+	private CRServo sweeper, rotate;
+    boolean drop;
     public void init(){
         //Initialization Code
 
@@ -24,9 +25,12 @@ public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
 		rightBack = hardwareMap.dcMotor.get("rightBack");
 		ArmRotate = hardwareMap.dcMotor.get("ArmRotate");
         ArmLift = hardwareMap.dcMotor.get("ArmLift");
-        sweeper = hardwareMap.servo.get("sweeper");
-        rotate = hardwareMap.servo.get("rotate");
+
         item = hardwareMap.servo.get("item");
+        rotate = hardwareMap.crservo.get("rotate");
+        sweeper = hardwareMap.crservo.get("sweeper");
+        dropper = hardwareMap.servo.get("dropper");
+        telemetry.addData("Encoder: ",leftFront.getCurrentPosition());
 
     }
 
@@ -47,7 +51,7 @@ public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
         if(gamepad1.left_trigger>0.5) rv--;
         //rv is now -1, 0, or 1
 //rotates arm to x degree
-        if(gamepad2.dpad_up) {
+       /* if(gamepad2.dpad_up) {
 
             ArmRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             ArmRotate.setTargetPosition(100);
@@ -58,7 +62,19 @@ public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
             ArmRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             ArmRotate.setTargetPosition(00);
             ArmRotate.setPower(1);
+        }*/
+        if(gamepad2.dpad_down) {
+            ArmRotate.setPower(1.0);
         }
+        if(gamepad2.dpad_up) {
+            ArmRotate.setPower(-1.0);
+        }
+        if(!gamepad2.dpad_down || !gamepad2.dpad_up){
+            ArmRotate.setPower(0.0);
+        }
+
+
+
 //lifts arm for final stage
         if(gamepad2.a) {
             ArmLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -66,33 +82,29 @@ public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
             ArmLift.setPower(1);
         }
 //lifts arm back and forth
-        if(gamepad2.left_stick_y!=0){
+        if(gamepad2.left_stick_y>0.5 || gamepad2.left_stick_y<0.5){
             ArmLift.setPower(gamepad2.left_stick_y);
         }
 //rotate sweeper
         if(gamepad2.x){
-            sweeperR+=0.1;
-            Range.clip(sweeperR, 0.0, 1.0);
-            sweeper.setPosition(sweeperR);
+            sweeper.setPower(1);
         }
         if(gamepad2.b){
-            sweeperR-=0.1;
-            Range.clip(sweeperR, 0.0, 1.0);
-            sweeper.setPosition(sweeperR);
+            sweeper.setPower(0);
         }
         if(gamepad2.y){
-            rotate.setPosition(repeat);
-            if(repeat == 0){
-                repeat += 1;
-            }else{
-                repeat -= 1;
-            }
+            rotate.setPower(1);
+        }else{
+            rotate.setPower(0.5);
         }
         if(gamepad2.right_bumper){
             item.setPosition(.5);
         }
         if(gamepad2.left_bumper){
             item.setPosition(0);
+        }
+        if(drop){
+            dropper.setPosition(.5);
         }
 
 //wheel movement
