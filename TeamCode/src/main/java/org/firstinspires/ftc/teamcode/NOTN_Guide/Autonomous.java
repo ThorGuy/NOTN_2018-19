@@ -11,12 +11,7 @@ public class Autonomous extends LinearOpMode{
     //This HashMap lets us select the values to set our motors to using a string instead of a number, so we can say "move forwards" instead of "move in direction 0"
     HashMap<String, Double[]> directions = new HashMap<String, Double[]>();
     //Initializing motors in a list, so they can be selected with a for loop.
-    DcMotor[] driveMotors = {
-        hardwareMap.dcMotor.get("rightFront"),
-        hardwareMap.dcMotor.get("rightBack"),
-        hardwareMap.dcMotor.get("leftFront"),
-        hardwareMap.dcMotor.get("leftBack"),
-    };
+    DcMotor[] driveMotors;
 
 
     public void runOpMode() throws InterruptedException{
@@ -26,22 +21,39 @@ public class Autonomous extends LinearOpMode{
     }
 
     public void initialize(){
+        ArmLift = hardwareMap.dcMotor.get("ArmLift");
+
+        driveMotors[0] = hardwareMap.dcMotor.get("rightFront");
+        driveMotors[1] = hardwareMap.dcMotor.get("rightBack");
+        driveMotors[2] = hardwareMap.dcMotor.get("leftFront");
+        driveMotors[3] = hardwareMap.dcMotor.get("leftBack");
+
         directions.put("forwards",  (new Double[] {-1.0,  1.0,  1.0, -1.0}));
         directions.put("backwards", (new Double[] { 1.0, -1.0, -1.0,  1.0}));
         directions.put("left",      (new Double[] { 1.0, -1.0,  1.0, -1.0}));
         directions.put("right",     (new Double[] {-1.0,  1.0, -1.0,  1.0}));
     }
 
-    public void moveDirection(String direction, long milliseconds) throws InterruptedException{
-        //Set the motors to the correct speed to move in the specified direction
+    public void moveDirection(String direction, long encoderSteps) throws InterruptedException{
+        //Set the motors' target positions
         for(int i=0;i<4;i++){
-            driveMotors[i].setPower(directions.get(direction)[i]);
+            driveMotors[i].setTargetPosition(encoderSteps);
         }
-        //wait an amount of time to allow the robot to move in said direction
-        wait(milliseconds);
-        //set the motor's speed back to 0
+        //Tell the motors to start moving
+        for(int i=0;i<4;i++){
+            driveMotors[i].setPower(directions.get(direction)[i]*0.5);
+        }
+        //Wait for the motors reach target
+        while (opModeIsActive() && leftMotor.isBusy())
+        {
+            telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
+            telemetry.update();
+            idle();
+        }
+        //Tell the motors to stop moving
         for(int i=0;i<4;i++){
             driveMotors[i].setPower(0.0);
         }
+
     }
 }
