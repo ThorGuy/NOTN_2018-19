@@ -10,6 +10,7 @@ import java.util.HashMap;
 public class Autonomous extends LinearOpMode{
     //This HashMap lets us select the values to set our motors to using a string instead of a number, so we can say "move forwards" instead of "move in direction 0"
     HashMap<String, Double[]> directions = new HashMap<String, Double[]>();
+    DcMotor ArmLift;
     //Initializing motors in a list, so they can be selected with a for loop.
     DcMotor[] driveMotors;
 
@@ -17,7 +18,17 @@ public class Autonomous extends LinearOpMode{
     public void runOpMode() throws InterruptedException{
         initialize();
         waitForStart();
-        moveDirection("forward", 1000);
+        moveMotor(ArmLift, -100, 0.1);
+//moveDirection("backwards", 100);
+    }
+
+    public void moveMotor(DcMotor motor, int encoderSteps, double power){
+        motor.setTargetPosition(encoderSteps);
+        motor.setPower(power);
+        while (opModeIsActive() && motor.isBusy()){
+            idle();
+        }
+        motor.setPower(0.0);
     }
 
     public void initialize(){
@@ -44,16 +55,12 @@ public class Autonomous extends LinearOpMode{
             driveMotors[i].setPower(directions.get(direction)[i]*0.5);
         }
         //Wait for the motors reach target
-        while (opModeIsActive() && leftMotor.isBusy())
-        {
-            telemetry.addData("encoder-fwd", leftMotor.getCurrentPosition() + "  busy=" + leftMotor.isBusy());
-            telemetry.update();
+        while (opModeIsActive() && leftMotor.isBusy()){
             idle();
         }
         //Tell the motors to stop moving
         for(int i=0;i<4;i++){
             driveMotors[i].setPower(0.0);
         }
-
     }
 }

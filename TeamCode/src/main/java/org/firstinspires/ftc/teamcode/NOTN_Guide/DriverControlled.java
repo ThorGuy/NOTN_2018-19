@@ -30,7 +30,8 @@ public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
         rotate = hardwareMap.crservo.get("rotate");
         sweeper = hardwareMap.crservo.get("sweeper");
         dropper = hardwareMap.servo.get("dropper");
-        telemetry.addData("Encoder: ",leftFront.getCurrentPosition());
+
+				ArmLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 
@@ -83,7 +84,12 @@ public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
         }
 //lifts arm back and forth
         if(gamepad2.left_stick_y>0.5 || gamepad2.left_stick_y<0.5){
-            ArmLift.setPower(gamepad2.left_stick_y);
+						if(gamepade2.left_stick_y<0&&Armlift.getCurrentPosition()<100){
+            		ArmLift.setPower(gamepad2.left_stick_y);
+						}
+						if(gamepade2.left_stick_y>0&&Armlift.getCurrentPosition()>0){
+	            	ArmLift.setPower(gamepad2.left_stick_y);
+						}
         }
 //rotate sweeper
         if(gamepad2.x){
