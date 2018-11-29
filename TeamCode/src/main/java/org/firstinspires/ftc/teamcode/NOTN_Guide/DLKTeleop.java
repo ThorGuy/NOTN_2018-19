@@ -14,7 +14,7 @@ public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
 	private Servo item, dropper;
 	private CRServo sweeper, rotate;
     boolean drop;
-		double speedMultiplier == 1;
+	float speedMultiplier == 1;
     public void init(){
         //Initialization Code
 
