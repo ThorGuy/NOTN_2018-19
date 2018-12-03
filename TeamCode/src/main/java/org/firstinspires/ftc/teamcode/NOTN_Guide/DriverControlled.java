@@ -98,11 +98,23 @@ public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
         if(gamepad2.b){
             sweeper.setPower(0);
         }
+
+
+
+				/* WARNING, TODO
+				 * Some numpty needs to fix this, this will not allow the rotate thingy
+				 * to remain at where it is. Not sure what it should be set at myself,
+				 * so to whoever is in charge, please do!
+				 */
         if(gamepad2.y){
             rotate.setPower(1);
         }else{
             rotate.setPower(0.5);
         }
+				/* WARNING */
+
+
+
         if(gamepad2.right_bumper){
             item.setPosition(.5);
         }
