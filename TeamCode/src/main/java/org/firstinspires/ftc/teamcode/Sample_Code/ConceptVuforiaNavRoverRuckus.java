@@ -92,7 +92,7 @@ import java.util.List;
  */
 
 @TeleOp(name="Concept: Vuforia Rover Nav", group ="Concept")
-@Disabled
+// @Disabled // We can use this now
 public class ConceptVuforiaNavRoverRuckus extends LinearOpMode {
 
     /*
@@ -250,6 +250,7 @@ public class ConceptVuforiaNavRoverRuckus extends LinearOpMode {
          * In this example, it is centered (left to right), but 110 mm forward of the middle of the robot, and 200 mm above ground level.
          */
 
+        // TODO // change the values to what we need them to be
         final int CAMERA_FORWARD_DISPLACEMENT  = 110;   // eg: Camera is 110 mm in front of robot center
         final int CAMERA_VERTICAL_DISPLACEMENT = 200;   // eg: Camera is 200 mm above ground
         final int CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
@@ -290,6 +291,11 @@ public class ConceptVuforiaNavRoverRuckus extends LinearOpMode {
                     break;
                 }
             }
+
+            /*
+             * If the target is visible, go ahead and adjust the translation
+             * according to the telemetry and the rotations.
+             */
 
             // Provide feedback as to where the robot is located (if we know).
             if (targetVisible) {
