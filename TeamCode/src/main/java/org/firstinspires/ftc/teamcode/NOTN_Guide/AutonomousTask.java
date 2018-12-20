@@ -11,25 +11,24 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-
-
+@SuppressWarnings("ALL")
 @Autonomous(name="AutoNomus", group="Linear Opmode")
 public class AutoOp extends LinearOpMode {
+
     public int[] power = new int[] {1,1,1,1};
     public int[] rotations = new int[]{1/4,1/4,1/4,1/4};
+
     DcMotor leftFront, leftBack, rightFront, rightBack, armLift, armRotate;
-    private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
-    private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
-    private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
 
-
-
+    private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";   //    ASSET
+    private static final String LABEL_GOLD_MINERAL = "Gold Mineral";       //     GOLD
+    private static final String LABEL_SILVER_MINERAL = "Silver Mineral";   //   SILVER
     private static final String VUFORIA_KEY = "AQYNN0//////AAABmeBGDwd4s0UkgGceRPKE4yeCzY2Nkmj7J15evwERwC16TDzbe1BbRpYNU3wMJJ5473aJgTzyjs/1eeI9Nq8EoXEN6lQVCO+04d0yUK2eKYEqlIC6+RXUQjgZDBV1wiBUOtMgD9qiQpmbrq17lRneXhDuWsfRR9iA7GGI4XhTINNRK5IV2d6242wnZLl913NPsb/yiwd4ltXvq2ZFIq4RXzgMgM8bpFuTHfe8tEWYguG6R7lRZ5W8IyJTe9RmXjcIeuROCz/32jWelgd+6p3ubE2JzquKplm7VC7XkLsnrHX5OaUHB/3IhtPGr/troy0vvqNJmigSL9V8fxVO4b/psyT6WCbhdLMjpsCWbnrJQ3Re";
 
-    private VuforiaLocalizer vuforia;
+    private VuforiaLocalizer vuforia;  //  Vuforia Initilization
+    private TFObjectDetector tfod;     //        idk wtf this is
 
-    private TFObjectDetector tfod;
-    @Override
+    @Override // Replace default method
     public void runOpMode(){
         int move = 1;
         int armLocation = -2;
@@ -51,8 +50,8 @@ public class AutoOp extends LinearOpMode {
 
 
     }
-    public void getVision() {
 
+    public void getVision() {
         initVuforia();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -65,7 +64,7 @@ public class AutoOp extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            /** Activate Tensor Flow Object Detection. */
+            /* Activate Tensor Flow Object Detection. */
             if (tfod != null) {
                 tfod.activate();
             }
@@ -97,7 +96,7 @@ public class AutoOp extends LinearOpMode {
                                     rotations[2] = -1/4;
                                     rotations[3] = -1/4;
                                     move(power,rotations);
-                                   rotations[0] = 2;
+                                    rotations[0] = 2;
                                     rotations[1] = 2;
                                     rotations[2] = 2;
                                     rotations[3] = 2;
@@ -191,12 +190,13 @@ public class AutoOp extends LinearOpMode {
         armLift = hardwareMap.dcMotor.get("ArmLift");
         armRotate = hardwareMap.dcMotor.get("ArmRotate");
     }
-   // public void drive(int degree){
-     //   int rotation = 2240;
-       /// int[] location = new int[] {rotation * degree, rotation * degree, rotation * degree, rotation * degree}; //set zero to 360 degree rotation
-    //    int[] power = new int[]{1, 1, 1, 1};
-   //     move(power,location);
-  //  }
+    /*  public void drive(int degree){
+     *       int rotation = 2240;
+     *       int[] location = new int[] {rotation * degree, rotation * degree, rotation * degree, rotation * degree}; //set zero to 360 degree rotation
+     *       int[] power = new int[]{1, 1, 1, 1};
+     *       move(power,location);
+     *  }
+     */
 
     public void armMove(int power, int location){
         //up down
@@ -205,12 +205,17 @@ public class AutoOp extends LinearOpMode {
         armRotate.setTargetPosition(location/rotation);
         armRotate.setPower(power);
     }
+
+    /**
+     *
+     * @param power
+     * @param location
+     */
     public void rotateArm(int power, int location){
         //rotate arm
         armLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         int rotation = 2240;
         armLift.setTargetPosition(location*rotation);
         armLift.setPower(power);
-
     }
 }
