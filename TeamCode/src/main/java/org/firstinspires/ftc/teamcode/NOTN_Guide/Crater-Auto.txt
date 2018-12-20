@@ -1,0 +1,16 @@
+dcMotor:leftFront:leftFront
+dcMotor:rightFront:rightFront
+dcMotor:leftBack:leftBack
+dcMotor:rightBack:rightBack
+servo:dropper:dropper
+
+dcMotor:armLift:ArmLift
+
+start
+
+armLift:-10:1
+wait
+
+
+
+end
