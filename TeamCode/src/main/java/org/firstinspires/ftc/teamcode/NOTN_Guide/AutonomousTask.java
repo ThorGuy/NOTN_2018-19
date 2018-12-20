@@ -16,7 +16,7 @@ import java.util.List;
 public class AutoOp extends LinearOpMode {
 
     public int[] power = new int[] {1,1,1,1};
-    public int[] rotations = new int[]{1/4,1/4,1/4,1/4};
+    public double[] rotations = new double[]{1/4,1/4,1/4,1/4};
 
     DcMotor leftFront, leftBack, rightFront, rightBack, armLift, armRotate;
 
@@ -56,8 +56,8 @@ public class AutoOp extends LinearOpMode {
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+        } else {             // Sorry
+            telemetry.addData("$#^@!", "This device is not compatible with TFOD");
         }
 
         telemetry.update();
