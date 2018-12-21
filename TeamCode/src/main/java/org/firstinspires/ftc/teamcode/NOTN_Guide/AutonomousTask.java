@@ -11,12 +11,18 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-@SuppressWarnings("ALL")
+/**
+ * @author Nerds of the North
+ *         Sami wrote this, Connor (V) made it less ugly.
+ *
+ * For FIRST FTC, 'totally' copyrighted
+ */
+@SuppressWarnings("ALL")  //  Because they $%&@ing suck
 @Autonomous(name="AutoNomus", group="Linear Opmode")
 public class AutoOp extends LinearOpMode {
 
     public int[] power = new int[] {1,1,1,1};
-    public double[] rotations = new double[]{1/4,1/4,1/4,1/4};
+    public double[] rotations = new double[] {1/4,1/4,1/4,1/4};
 
     DcMotor leftFront, leftBack, rightFront, rightBack, armLift, armRotate;
 
@@ -28,29 +34,38 @@ public class AutoOp extends LinearOpMode {
     private VuforiaLocalizer vuforia;  //  Vuforia Initilization
     private TFObjectDetector tfod;     //        idk wtf this is
 
+    /**
+     * What runs this mess
+     */
     @Override // Replace default method
     public void runOpMode(){
         int move = 1;
         int armLocation = -2;
-        inititalize();
+
+        initTask();
         armMove(move,armLocation);
         move(power, rotations);
+
+        // Reassign all to 1
         rotations[1] = 1;
         rotations[2] = 1;
         rotations[3] = 1;
         rotations[4] = 1;
+
         move(power, rotations);
+
         rotations[1] = -1/4;
         rotations[2] = -1/4;
         rotations[3] = -1/4;
         rotations[4] = -1/4;
+
         move(power, rotations);
         getVision();
-
-
-
     }
 
+    /**
+     * Current "Screen"
+     */
     public void getVision() {
         initVuforia();
 
@@ -75,17 +90,19 @@ public class AutoOp extends LinearOpMode {
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
+
                         if (updatedRecognitions.size() == 3) {
                             int goldMineralX = -1;
                             int silverMineral1X = -1;
                             int silverMineral2X = -1;
+
                             for (Recognition recognition : updatedRecognitions) {
                                 if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    goldMineralX = (int) recognition.getLeft();
+                                    goldMineralX     =  (int) recognition.getLeft();
                                 } else if (silverMineral1X == -1) {
-                                    silverMineral1X = (int) recognition.getLeft();
+                                    silverMineral1X  =  (int) recognition.getLeft();
                                 } else {
-                                    silverMineral2X = (int) recognition.getLeft();
+                                    silverMineral2X  =  (int) recognition.getLeft();
                                 }
                             }
                             if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
@@ -123,7 +140,6 @@ public class AutoOp extends LinearOpMode {
                                     rotations[2] = -1/2;
                                     rotations[3] = -1/2;
 
-
                                 } else {
                                     telemetry.addData("Gold Mineral Position", "Center");
                                     rotations[0] = 4;
@@ -131,7 +147,6 @@ public class AutoOp extends LinearOpMode {
                                     rotations[2] = 4;
                                     rotations[3] = 4;
                                     move(power,rotations);
-
                                 }
                             }
                         }
@@ -140,11 +155,14 @@ public class AutoOp extends LinearOpMode {
                 }
             }
         }
-
         if (tfod != null) {
             tfod.shutdown();
         }
     }
+
+    /**
+     * Initializes Vuforia crap
+     */
     private void initVuforia() {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -159,6 +177,10 @@ public class AutoOp extends LinearOpMode {
 
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
+
+    /**
+     * Initializes whatever TFOD is
+     */
     private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -166,7 +188,14 @@ public class AutoOp extends LinearOpMode {
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
-    public void move(int[] power, int[] location){
+
+    /**
+     * Moves. That's it. What the ^#@$ else would it do.
+     *
+     * @param power      power / speed
+     * @param location   wheels i guess, not sure
+     */
+    public void move(int[] power, double[] location){
         int rotate = 2240;
         //rotate *= Math.PI;
         leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -182,7 +211,11 @@ public class AutoOp extends LinearOpMode {
         rightFront.setTargetPosition(location[3] * rotate);
         rightFront.setPower(power[3]);
     }
-    public void inititalize(){
+
+    /**
+     * Initializes whatever this monstrosity is
+     */
+    public void initTask(){
         leftFront = hardwareMap.dcMotor.get("leftFront");
         leftBack = hardwareMap.dcMotor.get("leftBack");
         rightFront = hardwareMap.dcMotor.get("rightFront");
@@ -190,6 +223,7 @@ public class AutoOp extends LinearOpMode {
         armLift = hardwareMap.dcMotor.get("ArmLift");
         armRotate = hardwareMap.dcMotor.get("ArmRotate");
     }
+
     /*  public void drive(int degree){
      *       int rotation = 2240;
      *       int[] location = new int[] {rotation * degree, rotation * degree, rotation * degree, rotation * degree}; //set zero to 360 degree rotation
@@ -198,6 +232,12 @@ public class AutoOp extends LinearOpMode {
      *  }
      */
 
+    /**
+     * OH, HM, I BET IT MOVES THE ARM!? HUH!?
+     *
+     * @param power      power / speed
+     * @param location   really not sure what
+     */
     public void armMove(int power, int location){
         //up down
         int rotation = 2240;
@@ -207,9 +247,10 @@ public class AutoOp extends LinearOpMode {
     }
 
     /**
+     * HM DUR DURRR, WONDER WHAT ROTATE ARM DOES!?!?1?!!11!?
      *
-     * @param power
-     * @param location
+     * @param power      power / speed
+     * @param location   idk wtf this is though
      */
     public void rotateArm(int power, int location){
         //rotate arm
