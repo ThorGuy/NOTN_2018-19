@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -18,14 +20,15 @@ import java.util.List;
  * For FIRST FTC, 'totally' copyrighted
  */
 @SuppressWarnings("ALL")  //  Because they $%&@ing suck
-@Autonomous(name="AutoNomus", group="Linear Opmode")
+@Autonomous(name="BUFFmaster AutoNomus", group="Linear Opmode")
 public class AutoOp extends LinearOpMode {
 
-    public int[] power = new int[] {1,1,1,1};
-    public double[] rotations = new double[] {1/4,1/4,1/4,1/4};
+    public int[] power = new int[] {1, 1, 1, 1};
+    public int[] rotations = new int[] {1, 1, 1, 1};
 
     DcMotor leftFront, leftBack, rightFront, rightBack, armLift, armRotate;
-
+    public Servo item;
+    private ElapsedTime runtime = new ElapsedTime();
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";   //    ASSET
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";       //     GOLD
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";   //   SILVER
@@ -38,41 +41,29 @@ public class AutoOp extends LinearOpMode {
      * What runs this mess
      */
     @Override // Replace default method
-    public void runOpMode(){
+    public void runOpMode() throws InterruptedException{
+        waitForStart();
         int move = 1;
-        int armLocation = -2;
+        int armLocation = 3;
 
         initTask();
-        armMove(move,armLocation);
-        move(power, rotations);
-
-        // Reassign all to 1
-        rotations[1] = 1;
-        rotations[2] = 1;
-        rotations[3] = 1;
-        rotations[4] = 1;
-
-        move(power, rotations);
-
-        rotations[1] = -1/4;
-        rotations[2] = -1/4;
-        rotations[3] = -1/4;
-        rotations[4] = -1/4;
-
-        move(power, rotations);
-        getVision();
+        //lander();
+        //getVision();
+        drop();
     }
 
     /**
      * Current "Screen"
      */
-    public void getVision() {
-        initVuforia();
+    public boolean repeat = true;
+    public void getVision() throws InterruptedException{
+        if (repeat){initVuforia();}
+
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
         } else {             // Sorry
-            telemetry.addData("$#^@!", "This device is not compatible with TFOD");
+            telemetry.addData("Connor", "This device is not compatible with TFOD");
         }
 
         telemetry.update();
@@ -105,50 +96,138 @@ public class AutoOp extends LinearOpMode {
                                     silverMineral2X  =  (int) recognition.getLeft();
                                 }
                             }
+
                             if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                                 if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position", "Left");
-                                    rotations[0] = 1/4;
-                                    rotations[1] = 1/4;
-                                    rotations[2] = -1/4;
-                                    rotations[3] = -1/4;
-                                    move(power,rotations);
-                                    rotations[0] = 2;
-                                    rotations[1] = 2;
-                                    rotations[2] = 2;
-                                    rotations[3] = 2;
-                                    move(power,rotations);
-                                    rotations[0] = 1/2;
-                                    rotations[1] = 1/2;
-                                    rotations[2] = -1/2;
-                                    rotations[3] = -1/2;
-
+                                    //telemetry.update();
+                                    leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                                    leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                                    rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                                    rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                                    rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                                    rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                                    leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                                    leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                                    leftFront.setPower(.25);
+                                    rightFront.setPower(.25);
+                                    leftBack.setPower(.25);
+                                    rightBack.setPower(.25);
+                                    Thread.sleep(400);
+                                    leftFront.setPower(.25);
+                                    rightFront.setPower(-.25);
+                                    leftBack.setPower(.25);
+                                    rightBack.setPower(-.25);
+                                    Thread.sleep(2500);
+                                    leftFront.setPower(-.25);
+                                    rightFront.setPower(-.25);
+                                    leftBack.setPower(-.25);
+                                    rightBack.setPower(-.25);
+                                    Thread.sleep(800);
+                                    leftFront.setPower(0);
+                                    rightFront.setPower(0);
+                                    leftBack.setPower(0);
+                                    rightBack.setPower(0);
+                                    moveDrop();
                                 } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position", "Right");
-                                    rotations[0] = -1/4;
-                                    rotations[1] = -1/4;
-                                    rotations[2] = 1/4;
-                                    rotations[3] = 1/4;
-                                    move(power,rotations);
-                                    rotations[0] = 2;
-                                    rotations[1] = 2;
-                                    rotations[2] = 2;
-                                    rotations[3] = 2;
-                                    move(power,rotations);
-                                    rotations[0] = 1/2;
-                                    rotations[1] = 1/2;
-                                    rotations[2] = -1/2;
-                                    rotations[3] = -1/2;
+                                    //telemetry.update();
+                                    leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                                    leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                                    rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                                    rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                                    rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                                    rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                                    leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                                    leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                                    leftFront.setPower(-.25);
+                                    rightFront.setPower(-.25);
+                                    leftBack.setPower(-.25);
+                                    rightBack.setPower(-.25);
+                                    Thread.sleep(400);
+                                    leftFront.setPower(.25);
+                                    rightFront.setPower(-.25);
+                                    leftBack.setPower(.25);
+                                    rightBack.setPower(-.25);
+                                    Thread.sleep(2500);
+                                    leftFront.setPower(.25);
+                                    rightFront.setPower(.25);
+                                    leftBack.setPower(.25);
+                                    rightBack.setPower(.25);
+                                    Thread.sleep(800);
+                                    leftFront.setPower(0);
+                                    rightFront.setPower(0);
+                                    leftBack.setPower(0);
+                                    rightBack.setPower(0);
+                                    moveDrop();
 
                                 } else {
                                     telemetry.addData("Gold Mineral Position", "Center");
-                                    rotations[0] = 4;
-                                    rotations[1] = 4;
-                                    rotations[2] = 4;
-                                    rotations[3] = 4;
-                                    move(power,rotations);
+                                    //telemetry.update();
+                                    leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                                    leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                                    rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                                    rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                                    rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                                    rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                                    leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                                    leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                                    leftFront.setPower(.25);
+                                    rightFront.setPower(-.25);
+                                    leftBack.setPower(.25);
+                                    rightBack.setPower(-.25);
+                                    Thread.sleep(2100);
+                                    leftFront.setPower(0);
+                                    rightFront.setPower(0);
+                                    leftBack.setPower(0);
+                                    rightBack.setPower(0);
+                                    moveDrop();
+
                                 }
                             }
+                        }
+                        else if(repeat){
+                            leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            leftFront.setPower(.25);
+                            rightFront.setPower(.25);
+                            leftBack.setPower(.25);
+                            rightBack.setPower(.25);
+                            Thread.sleep(300);
+                            leftFront.setPower(0);
+                            rightFront.setPower(0);
+                            leftBack.setPower(0);
+                            rightBack.setPower(0);
+                            repeat = false;
+                            if (tfod != null) {
+                                tfod.shutdown();
+                            }
+                            getVision();
+                        } else {
+                            leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            leftFront.setPower(-.25);
+                            rightFront.setPower(-.25);
+                            leftBack.setPower(-.25);
+                            rightBack.setPower(-.25);
+                            Thread.sleep(10);
+                            leftFront.setPower(0);
+                            rightFront.setPower(0);
+                            leftBack.setPower(0);
+                            rightBack.setPower(0);
+                            Thread.sleep(25);
                         }
                         telemetry.update();
                     }
@@ -195,33 +274,54 @@ public class AutoOp extends LinearOpMode {
      * @param power      power / speed
      * @param location   wheels i guess, not sure
      */
-    public void move(int[] power, double[] location){
+    public void move(int[] power, int[] location) throws InterruptedException{
         int rotate = 2240;
         //rotate *= Math.PI;
         leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftFront.setTargetPosition(location[0] * rotate);
-        leftFront.setPower(power[0]);
-        leftBack.setTargetPosition(location[1] * rotate);
-        leftBack.setPower(power[1]);
-        rightFront.setTargetPosition(location[2] * rotate);
-        rightFront.setPower(power[2]);
-        rightFront.setTargetPosition(location[3] * rotate);
-        rightFront.setPower(power[3]);
+        leftFront.setTargetPosition(location[0]);
+        leftFront.setPower(.25);
+        leftBack.setTargetPosition(location[1]);
+        leftBack.setPower(.25);
+        rightFront.setTargetPosition(location[2]);
+        rightFront.setPower(.25);
+        rightFront.setTargetPosition(location[3]);
+        rightFront.setPower(.25);
+        while (opModeIsActive() &&
+                (runtime.seconds() < 6) &&
+                (leftBack.isBusy())) {
+        }armLift.setPower(0);
+
+
+       // Thread.sleep(100);
     }
 
     /**
      * Initializes whatever this monstrosity is
      */
     public void initTask(){
+
         leftFront = hardwareMap.dcMotor.get("leftFront");
         leftBack = hardwareMap.dcMotor.get("leftBack");
         rightFront = hardwareMap.dcMotor.get("rightFront");
         rightBack = hardwareMap.dcMotor.get("rightBack");
         armLift = hardwareMap.dcMotor.get("ArmLift");
         armRotate = hardwareMap.dcMotor.get("ArmRotate");
+
+        item = hardwareMap.servo.get("dropper");
+
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     /*  public void drive(int degree){
@@ -238,10 +338,79 @@ public class AutoOp extends LinearOpMode {
      * @param power      power / speed
      * @param location   really not sure what
      */
-    public void armMove(int power, int location){
+    public void lander() throws InterruptedException{
+        armLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armLift.setPower(.5);
+        Thread.sleep(3100);
+        armLift.setPower(0);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setPower(.25);
+        rightFront.setPower(.25);
+        leftBack.setPower(-.25);
+        rightBack.setPower(-.25);
+        Thread.sleep(300);
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setPower(.25);
+        rightFront.setPower(-.25);
+        leftBack.setPower(.25);
+        rightBack.setPower(-.25);
+        Thread.sleep(200);
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+        leftFront.setPower(-.5);
+        rightFront.setPower(-.5);
+        leftBack.setPower(.5);
+        rightBack.setPower(.5);
+        Thread.sleep(300);
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+        leftFront.setPower(.25);
+        rightFront.setPower(-.25);
+        leftBack.setPower(.25);
+        rightBack.setPower(-.25);
+        Thread.sleep(2000);
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+
+
+
+    }
+    public void drop() throws InterruptedException{
+
+         for(int x = 0; x<1; x+=.1){item.setPosition(x); Thread.sleep(1);}
+
+
+    };
+    public void moveView(){
+        //enter stuff here to get to the view
+    }
+    public void moveDrop(){
+        //enter stuff to get to the drop zone
+    }
+    public void ArmRotate(int power, int location){
         //up down
         int rotation = 2240;
-        armRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         armRotate.setTargetPosition(location/rotation);
         armRotate.setPower(power);
     }
@@ -252,11 +421,15 @@ public class AutoOp extends LinearOpMode {
      * @param power      power / speed
      * @param location   idk wtf this is though
      */
-    public void rotateArm(int power, int location){
+    public void armMove(){
         //rotate arm
-        armLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         int rotation = 2240;
-        armLift.setTargetPosition(location*rotation);
-        armLift.setPower(power);
-    }
+        armLift.setTargetPosition(7000);
+        armLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armLift.setPower(1);
+        while (opModeIsActive() &&
+                (runtime.seconds() < 5) &&
+                (armLift.isBusy())) {
+    }armLift.setPower(0);}
 }
