@@ -1,45 +1,59 @@
-package org.firstinspires.ftc.teamcode.Final_Code;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="Dab on it", group="Iterative Opmode") //Tells the app this is an opmode
+@TeleOp(name="BUFFMasterJay", group="Iterative Opmode") //Tells the app this is an opmode
 public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
 
 	//Creating the motor variables
 	private DcMotor leftFront, rightFront, leftBack, rightBack, ArmRotate, ArmLift;
 	private Servo item, dropper, sweeper, rotate;
-    boolean drop;
+    boolean Rotate;
     float speedMultiplier = 1;
     public void init(){
         //Initialization Code
 
         //Assigning the motor variables to the actual motors
         //servoone = hardwareMap.
-        leftFront = hardwareMap.dcMotor.get("leftFront");
-		rightFront = hardwareMap.dcMotor.get("rightFront");
-		leftBack = hardwareMap.dcMotor.get("leftBack");
-		rightBack = hardwareMap.dcMotor.get("rightBack");
-		ArmRotate = hardwareMap.dcMotor.get("ArmRotate");
-        ArmLift = hardwareMap.dcMotor.get("ArmLift");
+        leftFront   =   hardwareMap.dcMotor.get("leftFront");
+		rightFront  =   hardwareMap.dcMotor.get("rightFront");
+		leftBack    =   hardwareMap.dcMotor.get("leftBack");
+		rightBack   =   hardwareMap.dcMotor.get("rightBack");
+		ArmRotate   =   hardwareMap.dcMotor.get("ArmRotate");
+        ArmLift     =   hardwareMap.dcMotor.get("ArmLift");
 
-        item = hardwareMap.servo.get("item");
-        rotate = hardwareMap.servo.get("rotate");
-        sweeper = hardwareMap.servo.get("sweeper");
-        dropper = hardwareMap.servo.get("dropper");
+        item        =   hardwareMap.servo.get("item");//rotates bucket
+        rotate      =   hardwareMap.servo.get("rotate");
+        sweeper     =   hardwareMap.servo.get("sweeper");
+        dropper     =   hardwareMap.servo.get("dropper");
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ArmRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ArmLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         ArmLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        ArmRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
     public void loop(){
         //Code to run during the driver-control period
-        telemetry.addData("Encoder: ",leftFront.getCurrentPosition());
-        telemetry.addData("Encoder: ",ArmRotate.getCurrentPosition());
-        telemetry.addData("Encoder: ",ArmLift.getCurrentPosition());
-        telemetry.addData("Encoder: ",ArmRotate.getCurrentPosition());
+        telemetry.addData("Encoder leftFront: ", leftFront.getCurrentPosition());
+        telemetry.addData("Encoder rightFront: ", rightFront.getCurrentPosition());
+        telemetry.addData("Encoder leftBack: ", leftBack.getCurrentPosition());
+        telemetry.addData("Encoder rightBack: ", rightBack.getCurrentPosition());
+        telemetry.addData("Encoder Rotate: ", ArmRotate.getCurrentPosition());
+        telemetry.addData("Encoder Lift: ", ArmLift.getCurrentPosition());
         //Get the input stuff
 
         //Create a buffer, so not every slight movement of the joystick will make the robot move
@@ -67,74 +81,81 @@ public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
             ArmRotate.setPower(1);
         }*/
         if(gamepad2.dpad_down) {
-            ArmRotate.setPower(1.0);
-        }
-        if(gamepad2.dpad_up) {
-            ArmRotate.setPower(-1.0);
-        }
-        if(!gamepad2.dpad_down || !gamepad2.dpad_up){
+            ArmRotate.setPower(0.75);
+        } else if(gamepad2.dpad_up) {
+            ArmRotate.setPower(-0.75);
+        }else{
             ArmRotate.setPower(0.0);
         }
 
 
 
-//lifts arm for final stage
-        if(gamepad2.a) {
-            ArmRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ArmLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ArmRotate.setTargetPosition(-14556);
-            ArmLift.setTargetPosition(100);
-            ArmLift.setPower(1);
-        }
+
+
 //lifts arm back and forth
-        if(gamepad2.left_stick_y>0.1 ){
-            if (ArmLift.getCurrentPosition() > -3400) {
-                ArmLift.setPower(gamepad2.left_stick_y);
-            }
-        }
-        if(gamepad2.left_stick_y<0.1 ){
-            if(ArmLift.getCurrentPosition() < 0){
-                ArmLift.setPower(gamepad2.left_stick_y);
-            }
-        }
+        if(Math.abs(gamepad2.left_stick_y)>0.2 ) {
+            //if (ArmLift.getCurrentPosition() > -3400) {
+            ArmLift.setPower(-gamepad2.left_stick_y);
+            //}
+        } else {ArmLift.setPower(0);}
 //rotate sweeper
         if(gamepad2.x){
-            sweeper.setPosition(1);
-        }
-        if(gamepad2.b){
-            sweeper.setPosition(0);
+            dropper.setPosition(1.0);
         }
 
-        if(gamepad2.y){
-            rotate.setPosition(1);
-        }else{
-            rotate.setPosition(0);
+        telemetry.addData("Rotate",rotate.getPosition());
+        if(gamepad2.y ) {
+            if (Rotate) {
+                rotate.setPosition(1);
+                Rotate = false;
+            }else{
+                rotate.setPosition(0);
+                Rotate = true;
+            }
         }
+
         if(gamepad2.right_bumper){
             item.setPosition(.5);
         }
         if(gamepad2.left_bumper){
-            item.setPosition(0);
-        }
-        if(drop){
-            dropper.setPosition(.5);
+            item.setPosition(0.02);
         }
 
-        sweeper.setPosition(1);
 
-//wheel movement
-        if(rv!=0){
+        telemetry.addData("rTrigger",gamepad2.right_trigger);
+        telemetry.addData("lTrigger",gamepad2.left_trigger);
+        if (gamepad2.right_trigger > 0.5) {
+            sweeper.setPosition(1);
+        } else if (gamepad2.left_trigger > 0.5) {
+            sweeper.setPosition(0);
+        } else {
+            sweeper.setPosition(0.5);
+        }
+        //wheel movement
+        if(rv != 0){
             //rotate the robot
-            rightFront.setPower(rv * speedMultiplier);
-            rightBack.setPower(rv * speedMultiplier);
-            leftFront.setPower(rv * speedMultiplier);
-            leftBack.setPower(rv * speedMultiplier);
+            rightFront.setPower(-rv * speedMultiplier);
+            rightBack.setPower(-rv * speedMultiplier);
+            leftFront.setPower(-rv * speedMultiplier);
+            leftBack.setPower(-rv * speedMultiplier);
         }else{
             //move laterally
-            rightFront.setPower(yv * speedMultiplier + xv * speedMultiplier);
-            rightBack.setPower(yv * speedMultiplier - xv * speedMultiplier);
-            leftFront.setPower(-yv * speedMultiplier + xv * speedMultiplier);
-            leftBack.setPower(-yv * speedMultiplier - xv * speedMultiplier);
+            rightFront.setPower(-yv * speedMultiplier - xv * speedMultiplier);
+            rightBack.setPower(-yv * speedMultiplier + xv * speedMultiplier);
+            leftFront.setPower(yv * speedMultiplier - xv * speedMultiplier);
+            leftBack.setPower(yv * speedMultiplier + xv * speedMultiplier);
+        }
+       if (gamepad1.dpad_left){
+           rightFront.setPower(-speedMultiplier);
+           rightBack.setPower(speedMultiplier);
+           leftFront.setPower(speedMultiplier);
+           rightBack.setPower(-speedMultiplier);
+        }
+        if (gamepad1.dpad_right){
+            rightFront.setPower(speedMultiplier);
+            rightBack.setPower(-speedMultiplier);
+            leftFront.setPower(-speedMultiplier);
+            rightBack.setPower(speedMultiplier);
         }
         if(gamepad1.dpad_up){
             if(speedMultiplier <= .75){
