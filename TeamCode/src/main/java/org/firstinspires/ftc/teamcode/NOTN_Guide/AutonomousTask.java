@@ -21,7 +21,7 @@ import java.util.List;
  *
  * For FIRST FTC, 'totally' copyrighted
  */
-@SuppressWarnings("ALL")  //  Because they hecking suck
+@SuppressWarnings("ALL")  //  Because they hecking inhale
 @Autonomous(name="BUFFmaster AutoNomus", group="Linear Opmode")
 public class AutonomousTask extends LinearOpMode {
 
@@ -34,6 +34,7 @@ public class AutonomousTask extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";   //    ASSET
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";       //     GOLD
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";   //   SILVER
+    //Nice plaintext API key :thumbs_up:
     private static final String VUFORIA_KEY = "AQYNN0//////AAABmeBGDwd4s0UkgGceRPKE4yeCzY2Nkmj7J15evwERwC16TDzbe1BbRpYNU3wMJJ5473aJgTzyjs/1eeI9Nq8EoXEN6lQVCO+04d0yUK2eKYEqlIC6+RXUQjgZDBV1wiBUOtMgD9qiQpmbrq17lRneXhDuWsfRR9iA7GGI4XhTINNRK5IV2d6242wnZLl913NPsb/yiwd4ltXvq2ZFIq4RXzgMgM8bpFuTHfe8tEWYguG6R7lRZ5W8IyJTe9RmXjcIeuROCz/32jWelgd+6p3ubE2JzquKplm7VC7XkLsnrHX5OaUHB/3IhtPGr/troy0vvqNJmigSL9V8fxVO4b/psyT6WCbhdLMjpsCWbnrJQ3Re";
 
     private VuforiaLocalizer vuforia;  //  Vuforia Initilization
@@ -60,10 +61,10 @@ public class AutonomousTask extends LinearOpMode {
         //Do movement
 
         //Calculate the time the robot should stop moving
-        //TODO: Figure out if getRuntime() returns seconds or milliseconds
+        //TODO: Figure out if getRuntime() returns seconds or milliseconds (probably seconds)
         double stopTime = getRuntime() + time/1000.0;
 
-        //directions stores the directions each motor needs to rotate for movement in the specified direction
+        //`directions` stores the directions each motor needs to rotate to move in the specified manner
         leftFront.setPower(  directions.get(direction)[0]*power);
         rightFront.setPower( directions.get(direction)[1]*power);
         leftBack.setPower(   directions.get(direction)[2]*power);
@@ -87,10 +88,11 @@ public class AutonomousTask extends LinearOpMode {
     @Override // Replace default method
     public void runOpMode() throws InterruptedException{
         directions.put("forwards",   (new Double[] { 1.0, -1.0,  1.0, -1.0}));
+        directions.put("backwards",  (new Double[] {-1.0,  1.0, -1.0,  1.0}));
         directions.put("clockwise",  (new Double[] {-1.0, -1.0, -1.0, -1.0}));
         directions.put("counter",    (new Double[] { 1.0,  1.0,  1.0,  1.0}));
         directions.put("stop",       (new Double[] { 0.0,  0.0,  0.0,  0.0}));
-        //TODO: Find out which directions these go in
+        //TODO: Find out which one of these is left and right
         directions.put("mystery #1", (new Double[] { 1.0,  1.0, -1.0, -1.0}));
         directions.put("mystery #2", (new Double[] {-1.0, -1.0,  1.0,  1.0}));
 
@@ -112,7 +114,7 @@ public class AutonomousTask extends LinearOpMode {
     public void getVision() throws InterruptedException{
         if (repeat){initVuforia();}
 
-
+        //TODO: Whatever it takes to change ClassFactory to CheesecakeFactory
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
         } else {             // Sorry
@@ -152,6 +154,8 @@ public class AutonomousTask extends LinearOpMode {
                             //Test to see if all the minerals can be seen
                             if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                                 //Find which position the gold mineral is in
+
+                                //A smaller x-value means more towards the left
                                 if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position", "Left");
                                     //telemetry.update();
@@ -264,7 +268,7 @@ public class AutonomousTask extends LinearOpMode {
     }
 
     /**
-     * Moves. That's it. What the ^#@$ else would it do.
+     * Moves. That's it. What the heck else would it do.
      *
      * @param power      power / speed
      * @param location   wheels i guess, not sure
