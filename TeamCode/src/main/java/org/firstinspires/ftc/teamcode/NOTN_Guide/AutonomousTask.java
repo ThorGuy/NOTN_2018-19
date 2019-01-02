@@ -36,7 +36,7 @@ public class AutonomousTask extends LinearOpMode {
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";   //   SILVER
     //Nice plaintext API key :thumbs_up:
     private static final String VUFORIA_KEY = "AQYNN0//////AAABmeBGDwd4s0UkgGceRPKE4yeCzY2Nkmj7J15evwERwC16TDzbe1BbRpYNU3wMJJ5473aJgTzyjs/1eeI9Nq8EoXEN6lQVCO+04d0yUK2eKYEqlIC6+RXUQjgZDBV1wiBUOtMgD9qiQpmbrq17lRneXhDuWsfRR9iA7GGI4XhTINNRK5IV2d6242wnZLl913NPsb/yiwd4ltXvq2ZFIq4RXzgMgM8bpFuTHfe8tEWYguG6R7lRZ5W8IyJTe9RmXjcIeuROCz/32jWelgd+6p3ubE2JzquKplm7VC7XkLsnrHX5OaUHB/3IhtPGr/troy0vvqNJmigSL9V8fxVO4b/psyT6WCbhdLMjpsCWbnrJQ3Re";
-
+    private final int waitTime = 50;
     private VuforiaLocalizer vuforia;  //  Vuforia Initilization
     private TFObjectDetector tfod;     //        idk wtp this is
     private HashMap<String, Double[]> directions = new HashMap<String, Double[]>();
@@ -93,8 +93,8 @@ public class AutonomousTask extends LinearOpMode {
         directions.put("counter",    (new Double[] { 1.0,  1.0,  1.0,  1.0}));
         directions.put("stop",       (new Double[] { 0.0,  0.0,  0.0,  0.0}));
         //TODO: Find out which one of these is left and right
-        directions.put("mystery #1", (new Double[] { 1.0,  1.0, -1.0, -1.0}));
-        directions.put("mystery #2", (new Double[] {-1.0, -1.0,  1.0,  1.0}));
+        directions.put("right", (new Double[] { 1.0,  1.0, -1.0, -1.0}));
+        directions.put("left", (new Double[] {-1.0, -1.0,  1.0,  1.0}));
 
 
         waitForStart();
@@ -162,7 +162,7 @@ public class AutonomousTask extends LinearOpMode {
                                     moveDirection("counter",  0.25,400);
                                     moveDirection("forward",  0.25,2500);
                                     moveDirection("clockwise",0.25,800);
-                                    moveDirection("stop",     0.25,50);
+                                    moveDirection("stop",     0.25,waitTime);
                                     moveDrop();
                                 } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position", "Right");
@@ -170,20 +170,20 @@ public class AutonomousTask extends LinearOpMode {
                                     moveDirection("clockwise",0.25,400);
                                     moveDirection("forward",  0.25,2500);
                                     moveDirection("counter",  0.25,800);
-                                    moveDirection("stop",     0.25,50);
+                                    moveDirection("stop",     0.25, waitTime);
                                     moveDrop();
                                 } else {
                                     telemetry.addData("Gold Mineral Position", "Center");
                                     //telemetry.update();
                                     moveDirection("forward",  0.25,2100);
-                                    moveDirection("stop",     0.25,50);
+                                    moveDirection("stop",     0.25, waitTime);
                                     moveDrop();
                                 }
                             }
                         }
                         else if(repeat){
                             moveDirection("counter",  0.25,300);
-                            moveDirection("stop",     0.25,50);
+                            moveDirection("stop",     0.25, waitTime);
                             repeat = false;
                             if (tfod != null) {
                                 tfod.shutdown();
@@ -191,7 +191,7 @@ public class AutonomousTask extends LinearOpMode {
                             getVision();
                         } else {
                             moveDirection("counter",  0.25,10);
-                            moveDirection("stop",     0.25,50);
+                            moveDirection("stop",     0.25, waitTime);
                         }
                         telemetry.update();
                     }
@@ -303,70 +303,26 @@ public class AutonomousTask extends LinearOpMode {
      * @param location   really not sure what
      */
     public void lander() throws InterruptedException{
+        //Descending
         armLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armLift.setPower(.5);
-        Thread.sleep(3100);
+        Thread.sleep(2875);
         armLift.setPower(0);
 
 
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //TODO: Unknown direction #1; left or right
-        leftFront.setPower(.25);
-        rightFront.setPower(.25);
-        leftBack.setPower(-.25);
-        rightBack.setPower(-.25);
-        Thread.sleep(300);
-        //Stop
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
+        moveDirection("right",  0.25,300);
+        moveDirection("stop",   0.25, waitTime);
 
 
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //Forward
-        leftFront.setPower(.25);
-        rightFront.setPower(-.25);
-        leftBack.setPower(.25);
-        rightBack.setPower(-.25);
-        Thread.sleep(200);
-        //Stop
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-        //TODO: Unknown direction #2; left or right
-        leftFront.setPower(-.5);
-        rightFront.setPower(-.5);
-        leftBack.setPower(.5);
-        rightBack.setPower(.5);
-        Thread.sleep(300);
-        //Stop
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-        //Forward
-        leftFront.setPower(.25);
-        rightFront.setPower(-.25);
-        leftBack.setPower(.25);
-        rightBack.setPower(-.25);
-        Thread.sleep(2000);
-        //Stop
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
+
+        moveDirection("forward",0.25,200);
+        moveDirection("stop",   0.25, waitTime);
+        
+        moveDirection("left",0.25,300);
+        moveDirection("stop",   0.25, waitTime);
+
+        moveDirection("forward",0.25,2000);
+        moveDirection("stop",   0.25, waitTime);
 
 
 
