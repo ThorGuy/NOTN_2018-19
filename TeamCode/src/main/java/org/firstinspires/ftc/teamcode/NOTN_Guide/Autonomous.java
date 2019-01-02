@@ -45,7 +45,7 @@ public class Autonomous extends LinearOpMode{
         directions.put("right",     (new Double[] {-1.0,  1.0, -1.0,  1.0}));
     }
 
-    public void moveDirection(String direction, long encoderSteps) throws InterruptedException{
+    public void moveDirection(String direction, int encoderSteps) throws InterruptedException{
         //Set the motors' target positions
         for(int i=0;i<4;i++){
             driveMotors[i].setTargetPosition(encoderSteps);
@@ -55,7 +55,7 @@ public class Autonomous extends LinearOpMode{
             driveMotors[i].setPower(directions.get(direction)[i]*0.5);
         }
         //Wait for the motors reach target
-        while (opModeIsActive() && leftMotor.isBusy()){
+        while (opModeIsActive() && driveMotors[0].isBusy()){
             idle();
         }
         //Tell the motors to stop moving

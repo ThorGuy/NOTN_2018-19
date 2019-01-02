@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  * @author Connor Vann, stole half of this from Kathryn
  */
 @TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
-public class CVSCrappyTeleOpThing extends OpMode {
+public class CSVCrappyTeleOpThing extends OpMode {
 
   private DcMotor leftFront, rightFront, leftBack, rightBack, ArmRotate, ArmLift;
   private float velocityX = 0.0f, velocityY = 0.0f, rotationalVelocity = 0.0f;
