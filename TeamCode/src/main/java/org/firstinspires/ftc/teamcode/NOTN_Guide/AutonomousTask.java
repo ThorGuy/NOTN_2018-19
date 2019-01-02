@@ -46,7 +46,7 @@ public class AutonomousTask extends LinearOpMode {
      */
 
     public void moveDirection(String direction, Double power, int time){
-        //idk what this does but Sami put this every time he wanted to move so I'm putting it here
+        //idk why this is here but Sami put this every time he wanted to move so I'm putting it here
         leftFront.setMode(  DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBack.setMode(   DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode( DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -182,51 +182,16 @@ public class AutonomousTask extends LinearOpMode {
                             }
                         }
                         else if(repeat){
-                            leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                            leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                            rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                            rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                            rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                            rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                            leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                            leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                            //Counter-Clockwise
-                            leftFront.setPower(.25);
-                            rightFront.setPower(.25);
-                            leftBack.setPower(.25);
-                            rightBack.setPower(.25);
-                            Thread.sleep(300);
-                            //Stop
-                            leftFront.setPower(0);
-                            rightFront.setPower(0);
-                            leftBack.setPower(0);
-                            rightBack.setPower(0);
+                            moveDirection("counter",  0.25,300);
+                            moveDirection("stop",     0.25,50);
                             repeat = false;
                             if (tfod != null) {
                                 tfod.shutdown();
                             }
                             getVision();
                         } else {
-                            leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                            leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                            rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                            rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                            rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                            rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                            leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                            leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                            //Clockwise
-                            leftFront.setPower(-.25);
-                            rightFront.setPower(-.25);
-                            leftBack.setPower(-.25);
-                            rightBack.setPower(-.25);
-                            Thread.sleep(10);
-                            //Stop
-                            leftFront.setPower(0);
-                            rightFront.setPower(0);
-                            leftBack.setPower(0);
-                            rightBack.setPower(0);
-                            Thread.sleep(25);
+                            moveDirection("counter",  0.25,10);
+                            moveDirection("stop",     0.25,50);
                         }
                         telemetry.update();
                     }
@@ -342,11 +307,13 @@ public class AutonomousTask extends LinearOpMode {
         armLift.setPower(.5);
         Thread.sleep(3100);
         armLift.setPower(0);
+
+
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //TODO: Unknown direction #1
+        //TODO: Unknown direction #1; left or right
         leftFront.setPower(.25);
         rightFront.setPower(.25);
         leftBack.setPower(-.25);
@@ -357,6 +324,8 @@ public class AutonomousTask extends LinearOpMode {
         rightFront.setPower(0);
         leftBack.setPower(0);
         rightBack.setPower(0);
+
+
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -376,7 +345,7 @@ public class AutonomousTask extends LinearOpMode {
         rightFront.setPower(0);
         leftBack.setPower(0);
         rightBack.setPower(0);
-        //TODO: Unknown direction #2; opposite of #1
+        //TODO: Unknown direction #2; left or right
         leftFront.setPower(-.5);
         rightFront.setPower(-.5);
         leftBack.setPower(.5);
