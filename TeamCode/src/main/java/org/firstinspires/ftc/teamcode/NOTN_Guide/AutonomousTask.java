@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * @author Nerds of the North
  *         Sami wrote this, Connor (V) made it less ugly.
+ *         Thorbachev tore down the walls of code
  *
  * For FIRST FTC, 'totally' copyrighted
  */
@@ -59,7 +60,8 @@ public class AutonomousTask extends LinearOpMode {
         //Do movement
 
         //Calculate the time the robot should stop moving
-        double stopTime = getRuntime() + time;
+        //TODO: Figure out if getRuntime() returns seconds or milliseconds
+        double stopTime = getRuntime() + time/1000.0;
 
         //directions stores the directions each motor needs to rotate for movement in the specified direction
         leftFront.setPower(  directions.get(direction)[0]*power);
@@ -87,6 +89,7 @@ public class AutonomousTask extends LinearOpMode {
         directions.put("forwards",   (new Double[] { 1.0, -1.0,  1.0, -1.0}));
         directions.put("clockwise",  (new Double[] {-1.0, -1.0, -1.0, -1.0}));
         directions.put("counter",    (new Double[] { 1.0,  1.0,  1.0,  1.0}));
+        directions.put("stop",       (new Double[] { 0.0,  0.0,  0.0,  0.0}));
         //TODO: Find out which directions these go in
         directions.put("mystery #1", (new Double[] { 1.0,  1.0, -1.0, -1.0}));
         directions.put("mystery #2", (new Double[] {-1.0, -1.0,  1.0,  1.0}));
@@ -146,103 +149,31 @@ public class AutonomousTask extends LinearOpMode {
                                     silverMineral2X  =  (int) recognition.getLeft();
                                 }
                             }
-
+                            //Test to see if all the minerals can be seen
                             if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                                //Find which position the gold mineral is in
                                 if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position", "Left");
                                     //telemetry.update();
-                                    leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    //Counter-Clockwise
-                                    leftFront.setPower(.25);
-                                    rightFront.setPower(.25);
-                                    leftBack.setPower(.25);
-                                    rightBack.setPower(.25);
-                                    Thread.sleep(400);
-                                    //Forward
-                                    leftFront.setPower(.25);
-                                    rightFront.setPower(-.25);
-                                    leftBack.setPower(.25);
-                                    rightBack.setPower(-.25);
-                                    Thread.sleep(2500);
-                                    //Clockwise
-                                    leftFront.setPower(-.25);
-                                    rightFront.setPower(-.25);
-                                    leftBack.setPower(-.25);
-                                    rightBack.setPower(-.25);
-                                    Thread.sleep(800);
-                                    //Stop
-                                    leftFront.setPower(0);
-                                    rightFront.setPower(0);
-                                    leftBack.setPower(0);
-                                    rightBack.setPower(0);
+                                    moveDirection("counter",  0.25,400);
+                                    moveDirection("forward",  0.25,2500);
+                                    moveDirection("clockwise",0.25,800);
+                                    moveDirection("stop",     0.25,50);
                                     moveDrop();
                                 } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position", "Right");
                                     //telemetry.update();
-                                    leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    //Clockwise
-                                    leftFront.setPower(-.25);
-                                    rightFront.setPower(-.25);
-                                    leftBack.setPower(-.25);
-                                    rightBack.setPower(-.25);
-                                    Thread.sleep(400);
-                                    //Forward
-                                    leftFront.setPower(.25);
-                                    rightFront.setPower(-.25);
-                                    leftBack.setPower(.25);
-                                    rightBack.setPower(-.25);
-                                    Thread.sleep(2500);
-                                    //Counter-Clockwise
-                                    leftFront.setPower(.25);
-                                    rightFront.setPower(.25);
-                                    leftBack.setPower(.25);
-                                    rightBack.setPower(.25);
-                                    Thread.sleep(800);
-                                    //Stop
-                                    leftFront.setPower(0);
-                                    rightFront.setPower(0);
-                                    leftBack.setPower(0);
-                                    rightBack.setPower(0);
+                                    moveDirection("clockwise",0.25,400);
+                                    moveDirection("forward",  0.25,2500);
+                                    moveDirection("counter",  0.25,800);
+                                    moveDirection("stop",     0.25,50);
                                     moveDrop();
-
                                 } else {
                                     telemetry.addData("Gold Mineral Position", "Center");
                                     //telemetry.update();
-                                    leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    //Forward
-                                    leftFront.setPower(.25);
-                                    rightFront.setPower(-.25);
-                                    leftBack.setPower(.25);
-                                    rightBack.setPower(-.25);
-                                    Thread.sleep(2100);
-                                    //Stop
-                                    leftFront.setPower(0);
-                                    rightFront.setPower(0);
-                                    leftBack.setPower(0);
-                                    rightBack.setPower(0);
+                                    moveDirection("forward",  0.25,2100);
+                                    moveDirection("stop",     0.25,50);
                                     moveDrop();
-
                                 }
                             }
                         }
