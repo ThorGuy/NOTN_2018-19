@@ -79,7 +79,6 @@ public class testAutonomous extends LinearOpMode{
         //Time buffer to allow for any extra motion
         Thread.sleep(500);
       }
-    } catch (IOException e) {
-    }
+    } catch (IOException e) {}
   }
 }
