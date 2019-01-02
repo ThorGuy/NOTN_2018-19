@@ -98,6 +98,8 @@ public class AutonomousTask extends LinearOpMode {
         directions.put("left", (new Double[] {-1.0, -1.0,  1.0,  1.0}));
 
 
+    @Override // Replace default method
+    public void runOpMode() throws InterruptedException{
         waitForStart();
         int move = 1;
         int armLocation = 3;
