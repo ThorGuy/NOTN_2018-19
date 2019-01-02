@@ -93,13 +93,9 @@ public class AutonomousTask extends LinearOpMode {
         directions.put("clockwise",  (new Double[] {-1.0, -1.0, -1.0, -1.0}));
         directions.put("counter",    (new Double[] { 1.0,  1.0,  1.0,  1.0}));
         directions.put("stop",       (new Double[] { 0.0,  0.0,  0.0,  0.0}));
-        //TODO: Find out which one of these is left and right
         directions.put("right", (new Double[] { 1.0,  1.0, -1.0, -1.0}));
         directions.put("left", (new Double[] {-1.0, -1.0,  1.0,  1.0}));
 
-
-    @Override // Replace default method
-    public void runOpMode() throws InterruptedException{
         waitForStart();
         int move = 1;
         int armLocation = 3;
@@ -308,10 +304,7 @@ public class AutonomousTask extends LinearOpMode {
      */
     public void lander() throws InterruptedException{
         //Descending
-        armLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        armLift.setPower(.5);
-        Thread.sleep(2875);
-        armLift.setPower(0);
+        armMove();
 
 
         moveDirection("right",  0.25,300);
@@ -361,7 +354,7 @@ public class AutonomousTask extends LinearOpMode {
         //rotate arm
 
         int rotation = 2240;
-        armLift.setTargetPosition(7000);
+        armLift.setTargetPosition(8700);
         armLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armLift.setPower(1);
         while (opModeIsActive() &&
