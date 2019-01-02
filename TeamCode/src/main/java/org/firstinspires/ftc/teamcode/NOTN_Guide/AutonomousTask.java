@@ -40,6 +40,7 @@ public class AutonomousTask extends LinearOpMode {
     private VuforiaLocalizer vuforia;  //  Vuforia Initilization
     private TFObjectDetector tfod;     //        idk wtp this is
     private HashMap<String, Double[]> directions = new HashMap<String, Double[]>();
+    private boolean foundGold = false;
 
     /**
      * What runs this mess
@@ -130,7 +131,7 @@ public class AutonomousTask extends LinearOpMode {
                 tfod.activate();
             }
 
-            while (opModeIsActive()) {
+            while (opModeIsActive() && !foundGold) {
                 if (tfod != null) {
 
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
@@ -179,6 +180,7 @@ public class AutonomousTask extends LinearOpMode {
                                     moveDirection("stop",     0.25, waitTime);
                                     moveDrop();
                                 }
+                                foundGold = true;
                             }
                         }
                         else if(repeat){
@@ -317,7 +319,7 @@ public class AutonomousTask extends LinearOpMode {
 
         moveDirection("forward",0.25,200);
         moveDirection("stop",   0.25, waitTime);
-        
+
         moveDirection("left",0.25,300);
         moveDirection("stop",   0.25, waitTime);
 
