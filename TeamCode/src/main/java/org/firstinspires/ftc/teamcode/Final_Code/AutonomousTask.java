@@ -18,6 +18,7 @@ import java.util.List;
  * @author Nerds of the North
  *         Sami wrote this, Connor (V) made it less ugly.
  *         Thorbachev tore down the walls of code
+ *         Kathryn bullied Connor
  *
  * For FIRST FTC, 'totally' copyrighted
  */
