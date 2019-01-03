@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Final_Code;
+package org.firstinspires.ftc.teamcode.NOTN_Guide;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -21,7 +21,7 @@ import java.util.List;
  *
  * For FIRST FTC, 'totally' copyrighted
  */
-@SuppressWarnings("ALL")  //  Because they hecking inhale
+@SuppressWarnings("ALL")  
 @Autonomous(name="BUFFmaster AutoNomus", group="Linear Opmode")
 public class AutonomousTask extends LinearOpMode {
 
