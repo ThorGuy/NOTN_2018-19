@@ -40,10 +40,12 @@ public class AutonomousTask extends LinearOpMode {
     private HashMap<String, Double[]> directions = new HashMap<String, Double[]>();
     private boolean foundGold = false;
     public int goldPos = -1;                   //used to decide how to turn to face the corner
-    public int posOneRotation = 400;           //encoder value for turning to face the corner when the gold is on the left
-	public int posTwoRotation = 700;           //encoder value for turning to face the corner when the gold is on the center
-	public int posThreeRotation = 1000;           //encoder value for turning to face the corner when the gold is on the right
-    public int cornerMove = 400;               //encoder value to move forward into the corner
+    public int posOneRotation = 100;           //encoder value for turning to face the corner when the gold is on the left
+	public int posTwoRotation = 1000;          //encoder value for turning to face the corner when the gold is in the center
+	public int posThreeRotation = 10000;       //encoder value for turning to face the corner when the gold is on the right
+    public int posOneMove = 100;               //encoder value to move forward into the corner when the gold is on the left
+	public int posTwoMove = 1000;              //encoder value to move forward into the corner when the gold is in the center
+	public int posThreeMove = 10000;           //encoder value to move forward into the corner when the gold is on the left
     /**
      * What runs this mess
      */
