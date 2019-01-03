@@ -42,7 +42,11 @@ public class AutonomousTask extends LinearOpMode {
     private TFObjectDetector tfod;     //        idk wtp this is
     private HashMap<String, Double[]> directions = new HashMap<String, Double[]>();
     private boolean foundGold = false;
-    private int goldPos = -1;
+    public int goldPos = -1;
+    public int posOneRot = 400;
+    public int posTwoRot = 0;
+    public int posThreeRot = -400;
+    public int cornerMove = 400;
     /**
      * What runs this mess
      */
@@ -338,14 +342,14 @@ public class AutonomousTask extends LinearOpMode {
         //enter stuff here to get to the view
     }
     public void moveDrop(){
-        if(goldPos = 1){
-            moveDirection("clockwise",0.25,400);
-        }else if(goldPos = 2){
-            
+        if(goldPos == 1){
+            moveDirection("clockwise",0.25,posOneRot);
+        }else if(goldPos == 2){
+            moveDirection("clockwise",0.25,posTwoRot);
         }else{
-            moveDirection("counter",0.25,400);
+            moveDirection("clockwise",0.25,posThreeRot);
         }
-        moveDirection("forward",0.25,400);
+        moveDirection("forward",0.25,cornerMove);
     }
     public void ArmRotate(int power, int location){
         //up down
