@@ -62,8 +62,7 @@ public class AutonomousTask extends LinearOpMode {
         //Do movement
 
         //Calculate the time the robot should stop moving
-        //TODO: Figure out if getRuntime() returns seconds or milliseconds (probably seconds)
-        double stopTime = getRuntime() + time/1000.0;
+        double stopTime = getRuntime() + time;
 
         //`directions` stores the directions each motor needs to rotate to move in the specified manner
         leftFront.setPower(  directions.get(direction)[0]*power);
@@ -88,13 +87,13 @@ public class AutonomousTask extends LinearOpMode {
 
     @Override // Replace default method
     public void runOpMode() throws InterruptedException{
-        directions.put("forwards",   (new Double[] { 1.0, -1.0,  1.0, -1.0}));
-        directions.put("backwards",  (new Double[] {-1.0,  1.0, -1.0,  1.0}));
-        directions.put("clockwise",  (new Double[] {-1.0, -1.0, -1.0, -1.0}));
-        directions.put("counter",    (new Double[] { 1.0,  1.0,  1.0,  1.0}));
-        directions.put("stop",       (new Double[] { 0.0,  0.0,  0.0,  0.0}));
-        directions.put("right", (new Double[] { 1.0,  1.0, -1.0, -1.0}));
-        directions.put("left", (new Double[] {-1.0, -1.0,  1.0,  1.0}));
+        directions.put("forwards",  (new Double[] { 1.0, -1.0,  1.0, -1.0}));
+        directions.put("backwards", (new Double[] {-1.0,  1.0, -1.0,  1.0}));
+        directions.put("clockwise", (new Double[] {-1.0, -1.0, -1.0, -1.0}));
+        directions.put("counter",   (new Double[] { 1.0,  1.0,  1.0,  1.0}));
+        directions.put("stop",      (new Double[] { 0.0,  0.0,  0.0,  0.0}));
+        directions.put("right",     (new Double[] { 1.0,  1.0, -1.0, -1.0}));
+        directions.put("left",      (new Double[] {-1.0, -1.0,  1.0,  1.0}));
 
         waitForStart();
         int move = 1;
@@ -348,7 +347,7 @@ public class AutonomousTask extends LinearOpMode {
      * HM DUR DURRR, WONDER WHAT ROTATE ARM DOES!?!?1?!!11!?
      *
      * @param power      power / speed
-     * @param location   idk wtf this is though
+     * @param location   idk wtp this is though
      */
     public void armMove(){
         //rotate arm
