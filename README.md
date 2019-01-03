@@ -1,35 +1,48 @@
 ## Welcome!
 This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot.  To use this SDK, download/clone the entire project to your local computer.
+# Nerds of the North
 
 If you are new to the *FIRST* Tech Challenge software and control system, you should visit the online wiki to learn how to install, configure, and use the software and control system:
+### Welcome to your repository! 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://github.com/ftctechnh/ftc_app/wiki
+This is a super cool collaboration tool. For the most part you can't break things, so feel free to look around and get used to it. 
 
 Note that the wiki is an "evergreen" document that is constantly being updated and edited.  It contains the most current information about the *FIRST* Tech Challenge software and control system.
+There are tons of guides online about this stuff. There will be more personalized tutorials being published throughout the season.
 
 ## Downloading the Project
 It is important to note that this repository is large and can take a long time and use a lot of space to download. If you would like to save time and space, there are some options that you can choose to download only the most current version of the Android project folder:
+If you are interested in helping with the programing you should be added to this repository. That will allow you to not only download the most recent changes by others, but also push your own changes to the shared code.
 
 * If you are a git user, *FIRST* recommends that you use the --depth command line argument to only clone the most current version of the repository:
+You can always go back to previous states of the git so don't worry if you push something weird and delete everything. 
 
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;git clone --depth=1 https://github.com/ftctechnh/ftc_app.git</p>
+### Setting things up
 
 * Or, if you prefer, you can use the "Download Zip" button available through the main repository page.  Downloading the project as a .ZIP file will keep the size of the download manageable.
+I would highly, highly reccomend downloading the desktop GitHub tool. 
 
 * You can also download the project folder (as a .zip or .tar.gz archive file) from the Downloads subsection of the Releases page for this repository.
+You can find out how to get everything setup under the Wiki tab.
 
 Once you have downloaded and uncompressed (if needed) your folder, you can use Android Studio to import the folder  ("Import project (Eclipse ADT, Gradle, etc.)").
+### What can you do with GitHub?
 
 ## Getting Help
 ### User Documentation and Tutorials
 *FIRST* maintains an online wiki with information and tutorials on how to use the *FIRST* Tech Challenge software and robot control system.  You can access the wiki at the following address:
+In the (very) near future the Wiki tab will be populated will all kinds of goodies. That is where the official coding tutorial and all aditional resources will be stored.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://github.com/ftctechnh/ftc_app/wiki
+For now while things are still under construction, check out the projects tab and start thinking of things that need to be done/researched. If you have anything you want to put in the Wiki, go right on ahead.
 
 ### Javadoc Reference Material
 The Javadoc reference documentation for the FTC SDK is now available online.  Visit the following URL to view the FTC SDK documentation as a live website:
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://ftctechnh.github.io/ftc_app/doc/javadoc/index.html    
+TL;DR - GitHub is super cool and you will learn to love it.
 
 Documentation for the FTC SDK is also included with this repository.  There is a subfolder called "doc" which contains several subfolders:
 
@@ -719,3 +732,4 @@ In this latest version of the FTC SDK (20150803_001) the following changes shoul
 
 T. Eng
 August 3, 2015
+## Good luck nerds!

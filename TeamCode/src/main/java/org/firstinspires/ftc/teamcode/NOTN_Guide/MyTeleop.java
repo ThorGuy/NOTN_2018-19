@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Autonomous(name="AutoNomus", group="Linear Opmode")
-public class AutoOp extends LinearOpMode {
+public class MyTeleop extends LinearOpMode {
 
     DcMotor leftFront, leftBack, rightFront, rightBack, armLift, armRotate;
         private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";

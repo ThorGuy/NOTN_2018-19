@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name="Dab on it", group="Iterative Opmode") //Tells the app this is an opmode
-public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
+public class DriverControlled extends OpMode{ //Tells the library this is an opmode
 
 	//Creating the motor variables
 	private DcMotor leftFront, rightFront, leftBack, rightBack, ArmRotate, ArmLift;
@@ -84,10 +84,10 @@ public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
         }
 //lifts arm back and forth
         if(gamepad2.left_stick_y>0.5 || gamepad2.left_stick_y<0.5){
-						if(gamepade2.left_stick_y<0&&Armlift.getCurrentPosition()<100){
+						if(gamepad2.left_stick_y<0&&ArmLift.getCurrentPosition()<100){
             		ArmLift.setPower(gamepad2.left_stick_y);
 						}
-						if(gamepade2.left_stick_y>0&&Armlift.getCurrentPosition()>0){
+						if(gamepad2.left_stick_y>0&&ArmLift.getCurrentPosition()>0){
 	            	ArmLift.setPower(gamepad2.left_stick_y);
 						}
         }

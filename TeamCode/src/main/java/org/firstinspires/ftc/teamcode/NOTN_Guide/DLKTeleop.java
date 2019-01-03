@@ -7,14 +7,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name="Dab on it", group="Iterative Opmode") //Tells the app this is an opmode
-public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
+public class DLKTeleop extends OpMode{ //Tells the library this is an opmode
 
 	//Creating the motor variables
 	private DcMotor leftFront, rightFront, leftBack, rightBack, ArmRotate, ArmLift;
 	private Servo item, dropper;
 	private CRServo sweeper, rotate;
     boolean drop;
-	float speedMultiplier == 1;
+	float speedMultiplier = 1;
     public void init(){
         //Initialization Code
 
@@ -136,4 +136,3 @@ public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
 						}
 				}
     }
-}
