@@ -30,16 +30,24 @@ public class KMZMyOpMode extends OpMode{ //Tells the library this is an opmode
         sweeper = hardwareMap.servo.get("sweeper");
         dropper = hardwareMap.servo.get("dropper");
 
-        ArmLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 
     }
 
     public void loop(){
         //Code to run during the driver-control period
-        telemetry.addData("Encoder: ",leftFront.getCurrentPosition());
-        telemetry.addData("Encoder: ",ArmRotate.getCurrentPosition());
-        telemetry.addData("Encoder: ",ArmLift.getCurrentPosition());
-        telemetry.addData("Encoder: ",ArmRotate.getCurrentPosition());
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ArmRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ArmLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        telemetry.addData("ArmRotate: ",ArmRotate.getCurrentPosition());
+        telemetry.addData("ArmLift: ",ArmLift.getCurrentPosition());
+        telemetry.addData("LeftFront: ",leftFront.getCurrentPosition());
+        telemetry.addData("RightFront: ",rightFront.getCurrentPosition());
+        telemetry.addData("LeftBack: ",leftBack.getCurrentPosition());
+        telemetry.addData("RightBack: ",rightBack.getCurrentPosition());
         //Get the input stuff
 
         //Create a buffer, so not every slight movement of the joystick will make the robot move
