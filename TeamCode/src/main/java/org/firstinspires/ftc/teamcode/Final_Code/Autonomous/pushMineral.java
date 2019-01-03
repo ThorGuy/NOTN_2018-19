@@ -9,8 +9,42 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 public class pushMineral extends LinearOpMode{
-  public static boolean repeat = true;
-  public static String pushMineral(autoUtil AUtil) throws InterruptedException{
+
+
+  private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";   //    ASSET
+  private static final String LABEL_GOLD_MINERAL = "Gold Mineral";       //     GOLD
+  private static final String LABEL_SILVER_MINERAL = "Silver Mineral";   //   SILVER
+  private static final String VUFORIA_KEY = "AQYNN0//////AAABmeBGDwd4s0UkgGceRPKE4yeCzY2Nkmj7J15evwERwC16TDzbe1BbRpYNU3wMJJ5473aJgTzyjs/1eeI9Nq8EoXEN6lQVCO+04d0yUK2eKYEqlIC6+RXUQjgZDBV1wiBUOtMgD9qiQpmbrq17lRneXhDuWsfRR9iA7GGI4XhTINNRK5IV2d6242wnZLl913NPsb/yiwd4ltXvq2ZFIq4RXzgMgM8bpFuTHfe8tEWYguG6R7lRZ5W8IyJTe9RmXjcIeuROCz/32jWelgd+6p3ubE2JzquKplm7VC7XkLsnrHX5OaUHB/3IhtPGr/troy0vvqNJmigSL9V8fxVO4b/psyT6WCbhdLMjpsCWbnrJQ3Re";
+
+  private static VuforiaLocalizer vuforia;  //  Vuforia Initilization
+  private static TFObjectDetector tfod;
+  private static boolean foundGold = false;
+  private static boolean repeat = true;
+
+  private static void initVuforia() {
+      /*
+       * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+       */
+      VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+      parameters.vuforiaLicenseKey = VUFORIA_KEY;
+      parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+
+      //  Instantiate the Vuforia engine
+      vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+      // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
+  }
+
+  private static void initTfod() {
+      int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+        "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+      TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+      tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+      tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+  }
+
+  public static String doPushMineral() throws InterruptedException{
       if (repeat){initVuforia();}
 
       //TODO: Whatever it takes to change ClassFactory to CheesecakeFactory
@@ -58,40 +92,40 @@ public class pushMineral extends LinearOpMode{
                               if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                   telemetry.addData("Gold Mineral Position", "Left");
                                   //telemetry.update();
-                                  AUtil.moveDirection("counter",  0.25,400);
-                                  AUtil.moveDirection("forward",  0.25,2500);
-                                  AUtil.moveDirection("clockwise",0.25,800);
-                                  AUtil.moveDirection("stop",     0.25,waitTime);
+                                  autoUtil.moveDirection("counter",  0.25,400);
+                                  autoUtil.moveDirection("forward",  0.25,2500);
+                                  autoUtil.moveDirection("clockwise",0.25,800);
+                                  autoUtil.moveDirection("stop",     0.25,waitTime);
                                   return "Left";
                               } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                   telemetry.addData("Gold Mineral Position", "Right");
                                   //telemetry.update();
-                                  AUtil.moveDirection("clockwise",0.25,400);
-                                  AUtil.moveDirection("forward",  0.25,2500);
-                                  AUtil.moveDirection("counter",  0.25,800);
-                                  AUtil.moveDirection("stop",     0.25, waitTime);
+                                  autoUtil.moveDirection("clockwise",0.25,400);
+                                  autoUtil.moveDirection("forward",  0.25,2500);
+                                  autoUtil.moveDirection("counter",  0.25,800);
+                                  autoUtil.moveDirection("stop",     0.25, waitTime);
                                   return "Right";
                               } else {
                                   telemetry.addData("Gold Mineral Position", "Center");
                                   //telemetry.update();
-                                  AUtil.moveDirection("forward",  0.25,2100);
-                                  AUtil.moveDirection("stop",     0.25, waitTime);
+                                  autoUtil.moveDirection("forward",  0.25,2100);
+                                  autoUtil.moveDirection("stop",     0.25, waitTime);
                                   return "Center";
                               }
                               foundGold = true;
                           }
                       }
                       else if(repeat){
-                          AUtil.moveDirection("counter",  0.25,300);
-                          AUtil.moveDirection("stop",     0.25, waitTime);
+                          autoUtil.moveDirection("counter",  0.25,300);
+                          autoUtil.moveDirection("stop",     0.25, waitTime);
                           repeat = false;
                           if (tfod != null) {
                               tfod.shutdown();
                           }
                           getVision();
                       } else {
-                          AUtil.moveDirection("counter",  0.25,10);
-                          AUtil.moveDirection("stop",     0.25, waitTime);
+                          autoUtil.moveDirection("counter",  0.25,10);
+                          autoUtil.moveDirection("stop",     0.25, waitTime);
                       }
                       telemetry.update();
                   }

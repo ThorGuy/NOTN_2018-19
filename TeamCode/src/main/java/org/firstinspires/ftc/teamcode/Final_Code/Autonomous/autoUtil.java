@@ -16,13 +16,13 @@ public class autoUtil extends LinearOpMode{
     public static HashMap<String, Double[]> directions = new HashMap<String, Double[]>();
     public static DcMotor[] driveMotors = DcMotor[4];
     public static void init(){
-        directions.put("forwards",  (new Double[] { 1.0, -1.0,  1.0, -1.0}));
-        directions.put("backwards", (new Double[] {-1.0,  1.0, -1.0,  1.0}));
+        directions.put("forward",  (new Double[] { 1.0, -1.0,  1.0, -1.0}));
+        directions.put("backward", (new Double[] {-1.0,  1.0, -1.0,  1.0}));
+        directions.put("right",     (new Double[] { 1.0,  1.0, -1.0, -1.0}));
+        directions.put("left",      (new Double[] {-1.0, -1.0,  1.0,  1.0}));
         directions.put("clockwise", (new Double[] {-1.0, -1.0, -1.0, -1.0}));
         directions.put("counter",   (new Double[] { 1.0,  1.0,  1.0,  1.0}));
         directions.put("stop",      (new Double[] { 0.0,  0.0,  0.0,  0.0}));
-        directions.put("right",     (new Double[] { 1.0,  1.0, -1.0, -1.0}));
-        directions.put("left",      (new Double[] {-1.0, -1.0,  1.0,  1.0}));
 
         driveMotors[0] = hardwareMap.dcMotor.get("leftFront");
         driveMotors[1] = hardwareMap.dcMotor.get("rightFront");
@@ -58,6 +58,6 @@ public class autoUtil extends LinearOpMode{
         for(int i=0;i<4;i++){
           driveMotors[i].setPower(0.0);
         }
-        
+
     }
 }
