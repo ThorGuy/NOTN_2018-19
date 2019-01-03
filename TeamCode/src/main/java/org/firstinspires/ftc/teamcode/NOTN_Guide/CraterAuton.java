@@ -40,7 +40,9 @@ public class AutonomousTask extends LinearOpMode {
     private HashMap<String, Double[]> directions = new HashMap<String, Double[]>();
     private boolean foundGold = false;
     public int goldPos = -1;                   //used to decide how to turn to face the corner
-    public int cornerRotation = 400;           //encoder value for turning to face the corner when the gold is on the left or right
+    public int posOneRotation = 400;           //encoder value for turning to face the corner when the gold is on the left
+	public int posTwoRotation = 700;           //encoder value for turning to face the corner when the gold is on the center
+	public int posThreeRotation = 1000;           //encoder value for turning to face the corner when the gold is on the right
     public int cornerMove = 400;               //encoder value to move forward into the corner
     /**
      * What runs this mess
@@ -171,14 +173,14 @@ public class AutonomousTask extends LinearOpMode {
                                     moveDirection("forward",  0.25,2500);
                                     moveDirection("counter",  0.25,800);
                                     moveDirection("stop",     0.25, waitTime);
-                                    goldPos = 2;
+                                    goldPos = 3;
                                     moveDrop();
                                 } else {
                                     telemetry.addData("Gold Mineral Position", "Center");
                                     //telemetry.update();
                                     moveDirection("forward",  0.25,2100);
                                     moveDirection("stop",     0.25, waitTime);
-                                    goldPos = 3;
+                                    goldPos = 2;
                                     moveDrop();
                                 }
                                 foundGold = true;
@@ -336,16 +338,7 @@ public class AutonomousTask extends LinearOpMode {
     public void moveView(){
         //enter stuff here to get to the view
     }
-    public void moveDrop(){ //move to the corner at the end
-        if(goldPos == 1){
-            moveDirection("clockwise",0.25,cornerRotation);
-        }else if(goldPos == 2){
-            
-        }else{
-            moveDirection("counter",0.25,cornerRotation);
-        }
-        moveDirection("forward",0.25,cornerMove);
-    }
+
     public void ArmRotate(int power, int location){
         //up down
         int rotation = 2240;
