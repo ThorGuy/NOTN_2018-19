@@ -49,9 +49,9 @@ public class pushMineral extends LinearOpMode{
 
     //TODO: Whatever it takes to change ClassFactory to CheesecakeFactory
     if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-        initTfod();
+      initTfod();
     } else {             // Sorry
-        telemetry.addData("Connor", "This device is not compatible with TFOD");
+      telemetry.addData("Connor", "This device is not compatible with TFOD");
     }
 
     telemetry.update();
@@ -71,61 +71,61 @@ public class pushMineral extends LinearOpMode{
             telemetry.addData("# Object Detected", updatedRecognitions.size());
 
             if (updatedRecognitions.size() == 3) {
-                int goldMineralX = -1;
-                int silverMineral1X = -1;
-                int silverMineral2X = -1;
+              int goldMineralX = -1;
+              int silverMineral1X = -1;
+              int silverMineral2X = -1;
 
-                for (Recognition recognition : updatedRecognitions) {
-                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                        goldMineralX     =  (int) recognition.getLeft();
-                    } else if (silverMineral1X == -1) {
-                        silverMineral1X  =  (int) recognition.getLeft();
-                    } else {
-                        silverMineral2X  =  (int) recognition.getLeft();
-                    }
+              for (Recognition recognition : updatedRecognitions) {
+                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                  goldMineralX     =  (int) recognition.getLeft();
+                } else if (silverMineral1X == -1) {
+                  silverMineral1X  =  (int) recognition.getLeft();
+                } else {
+                  silverMineral2X  =  (int) recognition.getLeft();
                 }
-                //Test to see if all the minerals can be seen
-                if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-                    //Find which position the gold mineral is in
+              }
+              //Test to see if all the minerals can be seen
+              if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                //Find which position the gold mineral is in
 
-                    //A smaller x-value means more towards the left
-                    if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                        telemetry.addData("Gold Mineral Position", "Left");
-                        //telemetry.update();
-                        autoUtil.moveDirection("counter",  0.25,400);
-                        autoUtil.moveDirection("forward",  0.25,2500);
-                        autoUtil.moveDirection("clockwise",0.25,800);
-                        autoUtil.moveDirection("stop",     0.25,waitTime);
-                        return "Left";
-                    } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                        telemetry.addData("Gold Mineral Position", "Right");
-                        //telemetry.update();
-                        autoUtil.moveDirection("clockwise",0.25,400);
-                        autoUtil.moveDirection("forward",  0.25,2500);
-                        autoUtil.moveDirection("counter",  0.25,800);
-                        autoUtil.moveDirection("stop",     0.25, waitTime);
-                        return "Right";
-                    } else {
-                        telemetry.addData("Gold Mineral Position", "Center");
-                        //telemetry.update();
-                        autoUtil.moveDirection("forward",  0.25,2100);
-                        autoUtil.moveDirection("stop",     0.25, waitTime);
-                        return "Center";
-                    }
-                    foundGold = true;
+                //A smaller x-value means more towards the left
+                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                  telemetry.addData("Gold Mineral Position", "Left");
+                  //telemetry.update();
+                  autoUtil.moveDirection("counter",  0.25,400);
+                  autoUtil.moveDirection("forward",  0.25,2500);
+                  autoUtil.moveDirection("clockwise",0.25,800);
+                  autoUtil.moveDirection("stop",     0.25,waitTime);
+                  return "Left";
+                } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                  telemetry.addData("Gold Mineral Position", "Right");
+                  //telemetry.update();
+                  autoUtil.moveDirection("clockwise",0.25,400);
+                  autoUtil.moveDirection("forward",  0.25,2500);
+                  autoUtil.moveDirection("counter",  0.25,800);
+                  autoUtil.moveDirection("stop",     0.25, waitTime);
+                  return "Right";
+                } else {
+                  telemetry.addData("Gold Mineral Position", "Center");
+                  //telemetry.update();
+                  autoUtil.moveDirection("forward",  0.25,2100);
+                  autoUtil.moveDirection("stop",     0.25, waitTime);
+                  return "Center";
                 }
+                foundGold = true;
+              }
             }
             else if(repeat){
                 autoUtil.moveDirection("counter",  0.25,300);
                 autoUtil.moveDirection("stop",     0.25, waitTime);
                 repeat = false;
                 if (tfod != null) {
-                    tfod.shutdown();
+                  tfod.shutdown();
                 }
                 getVision();
             } else {
-                autoUtil.moveDirection("counter",  0.25,10);
-                autoUtil.moveDirection("stop",     0.25, waitTime);
+              autoUtil.moveDirection("counter",  0.25,10);
+              autoUtil.moveDirection("stop",     0.25, waitTime);
             }
             telemetry.update();
           }
