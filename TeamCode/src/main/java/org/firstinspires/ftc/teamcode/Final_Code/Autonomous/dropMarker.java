@@ -6,16 +6,15 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class dropMarker extends LinearOpMode{
 
-  private static Servo dropper;
+  private static Servo dropper; // Empty Assignment
 
   public static void drop() throws InterruptedException{
 
-    dropper = hardwareMap.servo.get("dropper");
+    dropper = hardwareMap.servo.get("dropper"); // Assign on use
 
-    for(int x = 0; x<1; x+=.1){
+    for(int x = 0; x < 1; x += 0.1){
        dropper.setPosition(x);
-       Thread.sleep(1);
+       Thread.sleep(1); // Milliseconds
     }
-    
   }
 }
