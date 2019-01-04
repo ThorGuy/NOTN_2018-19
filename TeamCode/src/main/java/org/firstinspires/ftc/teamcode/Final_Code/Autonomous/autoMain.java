@@ -4,7 +4,7 @@ public class autoMain{
   public static runAuto(String startPos) throws InterruptedException{
     landerDismount.dismount();
     String mineralPosition = pushMineral.doPushMineral();
-    boolean moveSuccess = MoveDrop.moveDrop(startPos, mineralPosition);
+    boolean moveSuccess = MoveDrop.moveDrop(mineralPosition, startPos);
     if(moveSuccess){
       dropMarker.drop();
     }
