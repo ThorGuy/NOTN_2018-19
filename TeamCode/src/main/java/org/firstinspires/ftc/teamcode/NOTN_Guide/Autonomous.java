@@ -15,25 +15,33 @@ import java.util.List;
 
 /**
  * @author Nerds of the North
- *         Sami wrote this, Connor (V) made it less ugly.
- *
+ * Sami wrote this, Connor (V) made it less ugly.
+ * <p>
  * For FIRST FTC, 'totally' copyrighted
  */
-@SuppressWarnings("ALL")  //  Because they $%&@ing suck
-@Autonomous(name="BUFFmaster AutoNomus", group="Linear Opmode")
+
+// @SuppressWarnings("ALL")  //  Because they $%&@ing suck
+@Autonomous(name = "BUFFmaster AutoNomus", group = "Linear Opmode")
 public class AutoOp extends LinearOpMode {
 
-    public int[] power = new int[] {1, 1, 1, 1};
-    public int[] rotations = new int[] {1, 1, 1, 1};
+    public static final int LEFT = -1;
+    public static final int CENTER = 0;
+    public static final int RIGHT = 1;
 
-    DcMotor leftFront, leftBack, rightFront, rightBack, armLift, armRotate;
-    public Servo item;
-    private ElapsedTime runtime = new ElapsedTime();
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";   //    ASSET
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";       //     GOLD
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";   //   SILVER
     private static final String VUFORIA_KEY = "AQYNN0//////AAABmeBGDwd4s0UkgGceRPKE4yeCzY2Nkmj7J15evwERwC16TDzbe1BbRpYNU3wMJJ5473aJgTzyjs/1eeI9Nq8EoXEN6lQVCO+04d0yUK2eKYEqlIC6+RXUQjgZDBV1wiBUOtMgD9qiQpmbrq17lRneXhDuWsfRR9iA7GGI4XhTINNRK5IV2d6242wnZLl913NPsb/yiwd4ltXvq2ZFIq4RXzgMgM8bpFuTHfe8tEWYguG6R7lRZ5W8IyJTe9RmXjcIeuROCz/32jWelgd+6p3ubE2JzquKplm7VC7XkLsnrHX5OaUHB/3IhtPGr/troy0vvqNJmigSL9V8fxVO4b/psyT6WCbhdLMjpsCWbnrJQ3Re";
 
+    public int[] power = new int[]{1, 1, 1, 1};
+    public int[] rotations = new int[]{1, 1, 1, 1};
+
+    public Servo item;
+
+    public boolean repeat = true;
+    DcMotor leftFront, leftBack, rightFront, rightBack, armLift, armRotate;
+
+    private ElapsedTime runtime = new ElapsedTime();
     private VuforiaLocalizer vuforia;  //  Vuforia Initilization
     private TFObjectDetector tfod;     //        idk wtf this is
 
@@ -41,25 +49,18 @@ public class AutoOp extends LinearOpMode {
      * What runs this mess
      */
     @Override // Replace default method
-    public void runOpMode() throws InterruptedException{
+    public void runOpMode() throws InterruptedException {
         waitForStart();
-        int move = 1;
-        int armLocation = 3;
 
         initTask();
-        //armMove();
         lander();
         getVision();
-        //drop();
     }
 
-    /**
-     * Current "Screen"
-     */
-    public boolean repeat = true;
-    public void getVision() throws InterruptedException{
-        if (repeat){initVuforia();}
-
+    public void getVision() throws InterruptedException {
+        if (repeat) {
+            initVuforia();
+        }
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
@@ -83,111 +84,65 @@ public class AutoOp extends LinearOpMode {
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
 
-                        if (updatedRecognitions.size() == 3) {
+                        if (updatedRecognitions.size() > 2) {
+
                             int goldMineralX = -1;
                             int silverMineral1X = -1;
                             int silverMineral2X = -1;
 
                             for (Recognition recognition : updatedRecognitions) {
                                 if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    goldMineralX     =  (int) recognition.getLeft();
+                                    goldMineralX = (int) recognition.getLeft();
                                 } else if (silverMineral1X == -1) {
-                                    silverMineral1X  =  (int) recognition.getLeft();
+                                    silverMineral1X = (int) recognition.getLeft();
                                 } else {
-                                    silverMineral2X  =  (int) recognition.getLeft();
+                                    silverMineral2X = (int) recognition.getLeft();
                                 }
                             }
 
                             if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                                 if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                    telemetry.addData("Gold Mineral Position", "Left");
-                                    //telemetry.update();
-                                    leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftFront.setPower(.25);
-                                    rightFront.setPower(.25);
-                                    leftBack.setPower(.25);
-                                    rightBack.setPower(.25);
-                                    Thread.sleep(400);
-                                    leftFront.setPower(.25);
-                                    rightFront.setPower(-.25);
-                                    leftBack.setPower(.25);
-                                    rightBack.setPower(-.25);
-                                    Thread.sleep(2500);
-                                    leftFront.setPower(-.25);
-                                    rightFront.setPower(-.25);
-                                    leftBack.setPower(-.25);
-                                    rightBack.setPower(-.25);
-                                    Thread.sleep(800);
-                                    leftFront.setPower(0);
-                                    rightFront.setPower(0);
-                                    leftBack.setPower(0);
-                                    rightBack.setPower(0);
-                                    moveDrop();
+                                    moveTo(LEFT);
                                 } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                    telemetry.addData("Gold Mineral Position", "Right");
-                                    //telemetry.update();
-                                    leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftFront.setPower(-.25);
-                                    rightFront.setPower(-.25);
-                                    leftBack.setPower(-.25);
-                                    rightBack.setPower(-.25);
-                                    Thread.sleep(400);
-                                    leftFront.setPower(.25);
-                                    rightFront.setPower(-.25);
-                                    leftBack.setPower(.25);
-                                    rightBack.setPower(-.25);
-                                    Thread.sleep(2500);
-                                    leftFront.setPower(.25);
-                                    rightFront.setPower(.25);
-                                    leftBack.setPower(.25);
-                                    rightBack.setPower(.25);
-                                    Thread.sleep(800);
-                                    leftFront.setPower(0);
-                                    rightFront.setPower(0);
-                                    leftBack.setPower(0);
-                                    rightBack.setPower(0);
-                                    moveDrop();
-
+                                    moveTo(RIGHT);
                                 } else {
-                                    telemetry.addData("Gold Mineral Position", "Center");
-                                    //telemetry.update();
-                                    leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                                    rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                                    leftFront.setPower(.25);
-                                    rightFront.setPower(-.25);
-                                    leftBack.setPower(.25);
-                                    rightBack.setPower(-.25);
-                                    Thread.sleep(2100);
-                                    leftFront.setPower(0);
-                                    rightFront.setPower(0);
-                                    leftBack.setPower(0);
-                                    rightBack.setPower(0);
-                                    moveDrop();
+                                    moveTo(CENTER);
+                                }
+                            } else if (goldMineralX != -1 && silverMineral1X != -1) {
+                                // what
+                            }
+                        } else if (updatedRecognitions.size() == 2) {
 
+                            // Locates LEFT and CENTER. RIGHT will not be seen if so.
+                            int goldMineralX = -1;
+                            int silverMineral1X = -1;
+                            //int silverMineral2X = -1;
+
+                            for (Recognition recognition : updatedRecognitions) {
+                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                    goldMineralX = (int) recognition.getLeft();
+                                } else if (silverMineral1X == -1) {
+                                    silverMineral1X = (int) recognition.getLeft();
+//                              } else {
+//                                  silverMineral2X = (int) recognition.getLeft();
                                 }
                             }
-                        }
-                        else if(repeat){
+
+                            // 2 1 0
+                            // L C R
+
+                            if (goldMineralX == -1) {
+                                moveTo(RIGHT);
+                                break;
+                            } else if (goldMineralX < silverMineral1X) {
+                                moveTo(LEFT);
+                                break;
+                            } else {
+                                moveTo(CENTER);
+                                break;
+                            }
+
+                        } else if (repeat) {
                             leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                             leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                             rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -272,37 +227,15 @@ public class AutoOp extends LinearOpMode {
     /**
      * Moves. That's it. What the ^#@$ else would it do.
      *
-     * @param power      power / speed
-     * @param location   wheels i guess, not sure
+     * @param power    power / speed
+     * @param location wheels i guess, not sure
      */
-    public void move(int[] power, int[] location) throws InterruptedException{
-        int rotate = 2240;
-        //rotate *= Math.PI;
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftFront.setTargetPosition(location[0]);
-        leftFront.setPower(.25);
-        leftBack.setTargetPosition(location[1]);
-        leftBack.setPower(.25);
-        rightFront.setTargetPosition(location[2]);
-        rightFront.setPower(.25);
-        rightFront.setTargetPosition(location[3]);
-        rightFront.setPower(.25);
-        while (opModeIsActive() &&
-                (runtime.seconds() < 6) &&
-                (leftBack.isBusy())) {
-        }armLift.setPower(0);
 
-
-       // Thread.sleep(100);
-    }
 
     /**
      * Initializes whatever this monstrosity is
      */
-    public void initTask(){
+    public void initTask() {
 
         leftFront = hardwareMap.dcMotor.get("leftFront");
         leftBack = hardwareMap.dcMotor.get("leftBack");
@@ -333,13 +266,7 @@ public class AutoOp extends LinearOpMode {
      *  }
      */
 
-    /**
-     * OH, HM, I BET IT MOVES THE ARM!? HUH!?
-     *
-     * @param power      power / speed
-     * @param location   really not sure what
-     */
-    public void lander() throws InterruptedException{
+    public void lander() throws InterruptedException {
         armLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -394,44 +321,161 @@ public class AutoOp extends LinearOpMode {
         leftBack.setPower(0);
         rightBack.setPower(0);
 
+    }
+
+    public void drop() throws InterruptedException {
+
+        for (int x = 0; x < 1; x += .1) {
+            item.setPosition(x);
+            Thread.sleep(1);
+        }
 
 
     }
-    public void drop() throws InterruptedException{
 
-         for(int x = 0; x<1; x+=.1){item.setPosition(x); Thread.sleep(1);}
-
-
-    };
-    public void moveView(){
+    public void moveView() {
         //enter stuff here to get to the view
     }
-    public void moveDrop(){
+
+    public void moveDrop() {
         //enter stuff to get to the drop zone
     }
-    public void ArmRotate(int power, int location){
+
+    public void ArmRotate(int power, int location) {
         //up down
         int rotation = 2240;
 
-        armRotate.setTargetPosition(location/rotation);
+        armRotate.setTargetPosition(location / rotation);
         armRotate.setPower(power);
     }
 
-    /**
-     * HM DUR DURRR, WONDER WHAT ROTATE ARM DOES!?!?1?!!11!?
-     *
-     * @param power      power / speed
-     * @param location   idk wtf this is though
-     */
-    public void armMove(){
+    public void armMove() {
         //rotate arm
-
-        int rotation = 2240;
         armLift.setTargetPosition(8750);
         armLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armLift.setPower(1);
         while (opModeIsActive() &&
                 (runtime.seconds() < 5) &&
                 (armLift.isBusy())) {
-    }armLift.setPower(0);}
+        }
+        armLift.setPower(0);
+    }
+
+    /**
+     * Moves the robot to the specified destination
+     *
+     * @param position in relation to LEFT, CENTER, and RIGHT
+     * @throws InterruptedException thrown if an illegal position is passed
+     */
+    private void moveTo(int position) throws InterruptedException {
+
+        if (position == LEFT) {
+            telemetry.addData("Gold Mineral Position", "Left");
+            //telemetry.update();
+            leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftFront.setPower(.25);
+            rightFront.setPower(.25);
+            leftBack.setPower(.25);
+            rightBack.setPower(.25);
+            Thread.sleep(400);
+            leftFront.setPower(.25);
+            rightFront.setPower(-.25);
+            leftBack.setPower(.25);
+            rightBack.setPower(-.25);
+            Thread.sleep(2500);
+            leftFront.setPower(-.25);
+            rightFront.setPower(-.25);
+            leftBack.setPower(-.25);
+            rightBack.setPower(-.25);
+            Thread.sleep(800);
+            leftFront.setPower(.25);
+            rightFront.setPower(-.25);
+            leftBack.setPower(.25);
+            rightBack.setPower(-.25);
+            Thread.sleep(1500);
+            leftFront.setPower(0);
+            rightFront.setPower(0);
+            leftBack.setPower(0);
+            rightBack.setPower(0);
+            drop();
+
+        } else if (position == CENTER) {
+            telemetry.addData("Gold Mineral Position", "Center");
+            //telemetry.update();
+            leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftFront.setPower(-.25);
+            rightFront.setPower(-.25);
+            leftBack.setPower(-.25);
+            rightBack.setPower(-.25);
+            Thread.sleep(200);
+            leftFront.setPower(.25);
+            rightFront.setPower(-.25);
+            leftBack.setPower(.25);
+            rightBack.setPower(-.25);
+            Thread.sleep(2100);
+            leftFront.setPower(.25);
+            rightFront.setPower(-.25);
+            leftBack.setPower(.25);
+            rightBack.setPower(-.25);
+            Thread.sleep(1000);
+            leftFront.setPower(0);
+            rightFront.setPower(0);
+            leftBack.setPower(0);
+            rightBack.setPower(0);
+            drop();
+
+        } else if (position == RIGHT) {
+            telemetry.addData("Gold Mineral Position", "Right");
+            //telemetry.update();
+            leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftFront.setPower(-.25);
+            rightFront.setPower(-.25);
+            leftBack.setPower(-.25);
+            rightBack.setPower(-.25);
+            Thread.sleep(800);
+            leftFront.setPower(.25);
+            rightFront.setPower(-.25);
+            leftBack.setPower(.25);
+            rightBack.setPower(-.25);
+            Thread.sleep(2500);
+            leftFront.setPower(.25);
+            rightFront.setPower(.25);
+            leftBack.setPower(.25);
+            rightBack.setPower(.25);
+            Thread.sleep(1000);
+            leftFront.setPower(.25);
+            rightFront.setPower(-.25);
+            leftBack.setPower(.25);
+            rightBack.setPower(-.25);
+            Thread.sleep(1500);
+            leftFront.setPower(0);
+            rightFront.setPower(0);
+            leftBack.setPower(0);
+            rightBack.setPower(0);
+            drop();
+
+
+        } else throw new IllegalArgumentException("Incorrect Position");
+    }
 }
