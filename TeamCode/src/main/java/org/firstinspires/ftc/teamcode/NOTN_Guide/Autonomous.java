@@ -297,7 +297,7 @@ public class AutoOp extends LinearOpMode {
         rightFront.setPower(-.25);
         leftBack.setPower(.25);
         rightBack.setPower(-.25);
-        Thread.sleep(50);
+        Thread.sleep(100);
         leftFront.setPower(0);
         rightFront.setPower(0);
         leftBack.setPower(0);
@@ -421,7 +421,7 @@ public class AutoOp extends LinearOpMode {
             rightFront.setPower(-.25);
             leftBack.setPower(-.25);
             rightBack.setPower(-.25);
-            Thread.sleep(200);
+            Thread.sleep(100);
             leftFront.setPower(.25);
             rightFront.setPower(-.25);
             leftBack.setPower(.25);
@@ -431,7 +431,7 @@ public class AutoOp extends LinearOpMode {
             rightFront.setPower(-.25);
             leftBack.setPower(.25);
             rightBack.setPower(-.25);
-            Thread.sleep(1000);
+            Thread.sleep(1500);
             leftFront.setPower(0);
             rightFront.setPower(0);
             leftBack.setPower(0);
